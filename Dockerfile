@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy all files
 COPY . ./
 
-# Use uvicorn to run from main.py via the CMD
-CMD exec uvicorn main:app --host 0.0.0.0 --port $PORT
+# Use python to run main.py natively catching the PORT env
+CMD ["python", "main.py"]

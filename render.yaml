@@ -7,4 +7,4 @@ services:
     branch: main
     envVars:
       - key: PORT
-        value: 8181
+        value: "8181"
