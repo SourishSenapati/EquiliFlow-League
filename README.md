@@ -95,5 +95,5 @@ We welcome contributions from fellow chemical engineers and developers! Please r
 
 ---
 
-*“Engineering the future of process simulation, one node at a time.”*
+*"Engineering the future of process simulation, one node at a time."*
 **EquiliFlow-League | 2026**
