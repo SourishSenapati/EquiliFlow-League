@@ -158,5 +158,6 @@ app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
-    # Use 8181 to avoid common port conflicts
-    uvicorn.run(app, host="127.0.0.1", port=8181)
+    # Use PORT environment variable for PaaS/Serverless deployment
+    port = int(os.environ.get("PORT", 8181))
+    uvicorn.run(app, host="0.0.0.0", port=port)

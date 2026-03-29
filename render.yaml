@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: equiliflow-league-engine
+    env: docker
+    plan: free
+    region: ohio
+    branch: main
+    envVars:
+      - key: PORT
+        value: 8181
