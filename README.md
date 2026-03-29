@@ -1,6 +1,6 @@
-# 🚀 EquiliFlow-League
+# EquiliFlow-League
 
-**The Progressive Digital Twin for Chemical Engineering Education**
+The Progressive Digital Twin for Chemical Engineering Education
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Python-3.9+-yellow.svg)](https://www.python.org/)
@@ -8,20 +8,21 @@
 
 ---
 
-## 🔬 Overview
+## Overview
 
-**EquiliFlow-League** is a high-fidelity, narrative-driven simulation platform designed to bridge the gap between academic theory and industrial practice. Developed for the *Chemical Engineers Learning League*, this platform provides a **4-Year Progressive Curriculum** where students unlock advanced physics and industrial control modules as they master foundational concepts.
+EquiliFlow-League is a high-fidelity, narrative-driven simulation platform designed to bridge the gap between academic theory and industrial practice. Developed for the *Chemical Engineers Learning League*, this platform provides a **4-Year Progressive Curriculum** where students unlock advanced physics and industrial control modules as they master foundational concepts.
 
-### Key Pillars:
+### Key Pillars
+
 - **Progressive Fidelity**: Start with simple mass balances (Year 1) and advance to complex 3D Navier-Stokes simulations and digital twin economics (Year 4).
-*   **Industrial-Grade Engine**: Python-based physics engine (`engine/`) solving for Reynolds numbers, friction factors, Arrhenius kinetics, and PID control.
-*   **Dual-Interface System**:
-    *   **Dashboard**: A premium Streamlit-based UI for high-level process monitoring.
-    *   **API Core**: A robust FastAPI backend for real-time telemetry and third-party integration.
+- **Industrial-Grade Engine**: Python-based physics engine (`engine/`) solving for Reynolds numbers, friction factors, Arrhenius kinetics, and PID control.
+- **Dual-Interface System**
+  - **Dashboard**: A premium Streamlit-based UI for high-level process monitoring.
+  - **API Core**: A robust FastAPI backend for real-time telemetry and third-party integration.
 
 ---
 
-## 🛠️ The 4-Year Curriculum
+## The 4-Year Curriculum
 
 | Year | Phase | Focus | Core Physics Module |
 | :--- | :--- | :--- | :--- |
@@ -32,15 +33,17 @@
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### 1. Requirements
+
 Ensure you have Python 3.9+ installed.
 
 ### 2. Installation
+
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/EquiliFlow-League.git
+git clone https://github.com/SourishSenapati/EquiliFlow-League.git
 cd EquiliFlow-League
 
 # Install dependencies
@@ -50,18 +53,20 @@ pip install -r requirements.txt
 ### 3. Launching the Platform
 
 **Start the Simulation Engine (Backend):**
+
 ```bash
 python main.py
 ```
 
 **Start the Learning Dashboard (Frontend):**
+
 ```bash
 streamlit run app.py
 ```
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 EquiliFlow-League/
@@ -78,13 +83,13 @@ EquiliFlow-League/
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from fellow chemical engineers and developers! Please read our `CONTRIBUTING.md` (coming soon) for details on our code of conduct and the process for submitting pull requests.
 

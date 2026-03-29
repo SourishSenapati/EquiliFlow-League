@@ -9,7 +9,7 @@ from engine.network import PlantNetwork
 from engine.solvers import FlowSolver
 
 def test_mvp_logic():
-    print("🚀 Initializing CoreFlow 2-Node MVP Test...")
+    print("[CoreFlow] Initializing 2-Node MVP Test...")
     
     # 1. Setup Network
     plant = PlantNetwork()
@@ -34,12 +34,12 @@ def test_mvp_logic():
     # Target Flow: 10 m3/hr = 10 / 3600 m3/s
     q_target = 10.0 / 3600.0
     
-    print(f"🔹 Target Flow: {q_target:.6f} m3/s")
+    print(f"* Target Flow: {q_target:.6f} m3/s")
     
     results = solver.solve_simple_path("Tank-A", "Pump-1", "Pipe-1", q_target)
     
     if results:
-        print("\n✅ Physics Solve Successful:")
+        print("\n[SUCCESS] Physics Solve Successful:")
         print(f"   - Reynolds Number: {int(results['reynolds']):,}")
         print(f"   - Friction Factor (f): {results['friction_factor']:.4f}")
         print(f"   - Head Loss: {results['head_loss']:.2f} m")
@@ -52,7 +52,7 @@ def test_mvp_logic():
         else:
             print("   - [Regime] Laminar flow detected.")
     else:
-        print("\n❌ Physics Solve Failed.")
+        print("\n[FAILED] Physics Solve Failed.")
 
 if __name__ == "__main__":
     test_mvp_logic()

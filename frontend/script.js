@@ -68,7 +68,7 @@ class CoreFlowApp {
         
         if (this.elements.resetBtn) {
             this.elements.resetBtn.addEventListener('click', async () => {
-                const confirmed = confirm("⚠️ CRITICAL OVERRIDE: Re-initialize the entire simulation? All progress and capital will be reset.");
+                const confirmed = confirm("[WARNING] CRITICAL OVERRIDE: Re-initialize the entire simulation? All progress and capital will be reset.");
                 if (confirmed) {
                     try {
                         const res = await fetch('/api/v1/simulation/reset', { method: 'POST' });
