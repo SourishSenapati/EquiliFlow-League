@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreFlow Academy | The Progressive Digital Twin</title>
+    <!-- Use a premium font: Outfit/Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+
+    <!-- Narrative Header -->
+    <header class="narrative-header">
+        <div class="logo-container">
+            <span class="logo-text">CoreFlow</span>
+            <span class="logo-badge">Academy</span>
+        </div>
+        <div class="status-bar">
+            <div class="status-item"><span id="telemetry-status" class="status-pill offline">Link: OFFLINE</span></div>
+            <div class="status-item">Year <span id="current-year">1</span></div>
+            <div class="status-item">Capital: <span id="capital-display">$1,000.00</span></div>
+            <button class="btn btn-secondary" id="reset-system" title="Purge State & Restart">Reset System</button>
+            <button class="btn btn-primary" id="examine-btn">Examine Plant</button>
+        </div>
+    </header>
+
+    <!-- Main Simulator Hub -->
+    <main class="sim-hub">
+        <aside class="sidebar-sim">
+            <h3>Curriculum Tracker</h3>
+            <ul class="curriculum-list">
+                <li class="curr-step active" data-year="1">1. Material Balancing</li>
+                <li class="curr-step" data-year="2">2. Hydrodynamics</li>
+                <li class="curr-step" data-year="3">3. Reaction Kinetics</li>
+                <li class="curr-step" data-year="4">4. Control & Economics</li>
+            </ul>
+        </aside>
+
+        <section class="viewport-sim">
+            <div class="canvas-container">
+                <div class="plant-visual" id="canvas-area">
+                    <!-- Flowsheet SVG / Canvas would go here -->
+                    <div class="visual-placeholder">
+                        <p id="regime-text">Mass Balance: Active</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-dash">
+                <!-- Controls: Change based on current year -->
+                <div class="controls-panel" id="controls-panel">
+                    <!-- Year 1 Controls -->
+                    <div class="year-layer" id="y1-controls">
+                        <h4>Mass Flow Control (Y1)</h4>
+                        <div class="control-group">
+                            <label>Feed Flow (m3/hr)</label>
+                            <input type="range" min="0" max="100" value="10" id="y1-q" title="Feed Flow Control" aria-label="Feed Flow in cubic meters per hour">
+                            <span class="val-display" id="y1-q-val">10</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Required Conversion (%)</label>
+                            <input type="range" min="0" max="100" value="70" id="y1-x" title="Conversion Control" aria-label="Required Conversion Percentage">
+                            <span class="val-display" id="y1-x-val">70</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Real-time Data -->
+                <div class="results-panel">
+                    <h4>Engine Real-time Output</h4>
+                    <div class="results-grid" id="results-grid">
+                        <div class="metric-card">
+                            <label>Product Flow</label>
+                            <div class="metric-val" id="res-prod-flow">7.00 m3/hr</div>
+                        </div>
+                        <div class="metric-card">
+                            <label>Waste Flow</label>
+                            <div class="metric-val" id="res-waste-flow">3.00 m3/hr</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification Engine -->
+    <div class="notification-area" id="notif-area"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
