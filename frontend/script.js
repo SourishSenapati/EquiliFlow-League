@@ -130,6 +130,11 @@ class EquiliFlowApp {
         const cardTitle = document.createElement('h4');
         this.elements.resultsGrid.innerHTML = ''; 
 
+        // Update active educational module
+        document.querySelectorAll('.formula-block').forEach((block, idx) => {
+            block.classList.toggle('active', (idx + 1) === year);
+        });
+
         if (year === 1) {
             this.renderY1();
         } else if (year === 2) {

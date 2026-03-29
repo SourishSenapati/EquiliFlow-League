@@ -41,11 +41,67 @@
         </aside>
 
         <section class="viewport-sim">
+            <!-- Educational Physics Hub (Bloomberg Style) -->
+            <div class="educational-pane stage">
+                <h4>[LEARNING MODULE]: Governing Dynamics</h4>
+                <div class="theory-grid" id="theory-grid">
+                    <!-- Dynamic formulas will appear here -->
+                    <div class="formula-block active" id="theory-y1">
+                        <label>MODULE 01: THE LAW OF CONSERVATION</label>
+                        <p class="formula-text">ACCUMULATION = IN - OUT + GENERATION - CONSUMPTION</p>
+                        <p class="theory-desc">Before dealing with thermodynamics or fluid friction, a process engineer must ensure mass is conserved. Adjusting 'Feed Flow Rate' (Q) dictates inputs. 'Target Conversion' (X) defines the generation/consumption of limiting reactants. Imbalances will literally overflow the tanks.</p>
+                        <hr class="term-divider">
+                        <label>VARIABLE DEFINITIONS:</label>
+                        <ul class="term-list">
+                            <li><strong>Q (m³/hr):</strong> Volumetric Flow Rate. Directly proportional to pump CapEx.</li>
+                            <li><strong>X (%):</strong> Conversion Factor. (N_A0 - N_A)/N_A0. Approaching 100% requires exponential reactor volume (V).</li>
+                        </ul>
+                    </div>
+                    <div class="formula-block" id="theory-y2">
+                        <label>MODULE 02: HYDRODYNAMICS & BERNOULLI</label>
+                        <p class="formula-text">P_PUMP / ρ + v²/2 = ΔZ * g + f(L/D)(v²/2)</p>
+                        <p class="theory-desc">Pushing fluid through a pipe generates friction. To maintain flow, a pump must supply enough head to overcome elevation changes (ΔZ) and friction loss (Moody friction factor 'f').</p>
+                        <hr class="term-divider">
+                        <label>VARIABLE DEFINITIONS:</label>
+                        <ul class="term-list">
+                            <li><strong>Re (Reynolds No.):</strong> ρvD/μ. Determines if flow is Laminar (< 2000) or Turbulent (> 4000).</li>
+                            <li><strong>Pump Power (kW):</strong> Directly proportional to Q × ΔP. Larger pipes cost more upfront but save massive energy over time.</li>
+                        </ul>
+                    </div>
+                    <div class="formula-block" id="theory-y3">
+                        <label>MODULE 03: REACTION KINETICS (ARRHENIUS)</label>
+                        <p class="formula-text">k = A * e^(-E_a / (R * T))</p>
+                        <p class="theory-desc">Chemical reactions depend exponentially on temperature. Heating a Continuous Stirred-Tank Reactor (CSTR) increases reaction rate (k) dramatically, but risks runaway thermal explosions and costs massive energy.</p>
+                        <hr class="term-divider">
+                        <label>VARIABLE DEFINITIONS:</label>
+                        <ul class="term-list">
+                            <li><strong>T (Kelvin):</strong> System Temperature. The apex control variable.</li>
+                            <li><strong>E_a (kJ/mol):</strong> Activation Energy. The energy barrier molecules must overcome. Catalysts literally map this value lower.</li>
+                        </ul>
+                    </div>
+                    <div class="formula-block" id="theory-y4">
+                        <label>MODULE 04: ECONOMICS & INVERTED CURVES</label>
+                        <p class="formula-text">PROFIT = $ * [F_A0 * X] - (CapEx + OpEx(v²))</p>
+                        <p class="theory-desc">The ultimate test. Everything is a trade-off. Forcing 100% conversion costs near-infinite energy. Running pipes perfectly fast requires giant pumps. The thermodynamic "sweet spot" is an inverted parabola.</p>
+                        <hr class="term-divider">
+                        <label>VARIABLE DEFINITIONS:</label>
+                        <ul class="term-list">
+                            <li><strong>CapEx ($):</strong> Upfront capital expenditure (buying bigger pipes/tanks).</li>
+                            <li><strong>OpEx ($/hr):</strong> Recurring operating expenditure (electricity/heat). Scales roughly with v².</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Viewport: The Stage -->
             <div class="canvas-container stage">
                 <div class="plant-visual" id="canvas-area">
                     <div class="visual-placeholder">
-                        <p id="regime-text">Data Stream: Standby</p>
+                        <p id="regime-text">DATA STREAM: INITIALIZING...</p>
+                        <div class="terminal-loader" id="terminal-loader">
+                            > SYSTEM_CHECK: NOMINAL <br>
+                            > LOADING PHYSICS_ENGINE(REYNOLDS, ARRHENIUS)... DONE <br>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,14 +111,14 @@
                 <div class="controls-panel stage" id="controls-panel">
                     <!-- Year 1 Controls (Initial State) -->
                     <div class="year-layer" id="y1-controls">
-                        <h4>Parameters: Flow Control (Y1)</h4>
+                        <h4>[CTRL_PANEL]: Flow Matrix (Y1)</h4>
                         <div class="control-group">
-                            <label for="y1-q">Feed Flow Rate (m³/hr)</label>
+                            <label for="y1-q">Feed Flow Rate (Q_in) [m³/hr]</label>
                             <input type="range" min="0" max="100" value="10" id="y1-q" title="Feed Flow Control">
                             <span class="val-display" id="y1-q-val">10</span>
                         </div>
                         <div class="control-group">
-                            <label for="y1-x">Target Conversion (%)</label>
+                            <label for="y1-x">Target Conversion (X_A) [%]</label>
                             <input type="range" min="0" max="100" value="70" id="y1-x" title="Conversion Control">
                             <span class="val-display" id="y1-x-val">70</span>
                         </div>
@@ -71,15 +127,23 @@
 
                 <!-- Simulation Real-time Data: Forensic Analysis Layer -->
                 <div class="results-panel stage">
-                    <h4>Operational Analytics</h4>
+                    <h4>[TELEM]: Operational Analytics</h4>
                     <div class="results-grid" id="results-grid">
                         <div class="metric-card">
-                            <label>Product Yield</label>
-                            <div class="metric-val" id="res-prod-flow">7.00 m³/hr</div>
+                            <label>Product Yield (F_B)</label>
+                            <div class="metric-val" id="res-prod-flow">0.00</div>
                         </div>
                         <div class="metric-card">
-                            <label>Waste Stream</label>
-                            <div class="metric-val" id="res-waste-flow">3.00 m³/hr</div>
+                            <label>Waste Stream (F_W)</label>
+                            <div class="metric-val" id="res-waste-flow">0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <label>Thermodynamic Eff.</label>
+                            <div class="metric-val text-gold">94.2%</div>
+                        </div>
+                        <div class="metric-card">
+                            <label>System Integrity</label>
+                            <div class="metric-val">STABLE</div>
                         </div>
                     </div>
                 </div>
