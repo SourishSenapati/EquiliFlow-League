@@ -51,10 +51,11 @@
                         <p class="formula-text">ACCUMULATION = IN - OUT + GENERATION - CONSUMPTION</p>
                         <p class="theory-desc">Before dealing with thermodynamics or fluid friction, a process engineer must ensure mass is conserved. Adjusting 'Feed Flow Rate' (Q) dictates inputs. 'Target Conversion' (X) defines the generation/consumption of limiting reactants. Imbalances will literally overflow the tanks.</p>
                         <hr class="term-divider">
-                        <label>VARIABLE DEFINITIONS:</label>
+                        <label>MICRO-CONCEPTS (Y1):</label>
                         <ul class="term-list">
                             <li><strong>Q (m³/hr):</strong> Volumetric Flow Rate. Directly proportional to pump CapEx.</li>
                             <li><strong>X (%):</strong> Conversion Factor. (N_A0 - N_A)/N_A0. Approaching 100% requires exponential reactor volume (V).</li>
+                            <li><strong>Split Ratios:</strong> Mismanaging the recycle loop will cause steady-state accumulation.</li>
                         </ul>
                     </div>
                     <div class="formula-block" id="theory-y2">
@@ -62,10 +63,11 @@
                         <p class="formula-text">P_PUMP / ρ + v²/2 = ΔZ * g + f(L/D)(v²/2)</p>
                         <p class="theory-desc">Pushing fluid through a pipe generates friction. To maintain flow, a pump must supply enough head to overcome elevation changes (ΔZ) and friction loss (Moody friction factor 'f').</p>
                         <hr class="term-divider">
-                        <label>VARIABLE DEFINITIONS:</label>
+                        <label>MICRO-CONCEPTS (Y2):</label>
                         <ul class="term-list">
                             <li><strong>Re (Reynolds No.):</strong> ρvD/μ. Determines if flow is Laminar (< 2000) or Turbulent (> 4000).</li>
-                            <li><strong>Pump Power (kW):</strong> Directly proportional to Q × ΔP. Larger pipes cost more upfront but save massive energy over time.</li>
+                            <li><strong>CapEx vs. OpEx Tradeoff:</strong> Larger pipe diameter = less friction (lower OpEx for pumps), but higher upfront cost (CapEx).</li>
+                            <li><strong>Pump Sizing:</strong> Pump brake horsepower = (Q * ΔP) / (η). Inefficiencies generate waste heat.</li>
                         </ul>
                     </div>
                     <div class="formula-block" id="theory-y3">
@@ -73,10 +75,12 @@
                         <p class="formula-text">k = A * e^(-E_a / (R * T))</p>
                         <p class="theory-desc">Chemical reactions depend exponentially on temperature. Heating a Continuous Stirred-Tank Reactor (CSTR) increases reaction rate (k) dramatically, but risks runaway thermal explosions and costs massive energy.</p>
                         <hr class="term-divider">
-                        <label>VARIABLE DEFINITIONS:</label>
+                        <label>MICRO-CONCEPTS (Y3):</label>
                         <ul class="term-list">
                             <li><strong>T (Kelvin):</strong> System Temperature. The apex control variable.</li>
-                            <li><strong>E_a (kJ/mol):</strong> Activation Energy. The energy barrier molecules must overcome. Catalysts literally map this value lower.</li>
+                            <li><strong>System Runaway:</strong> Exothermic reactions generate extra heat, driving T higher, looping the Arrhenius function until node failure.</li>
+                            <li><strong>E_a (kJ/mol):</strong> Activation Energy. Catalysts synthesize pathways to map this value lower, saving thermal CapEx.</li>
+                            <li><strong>CSTR vs. PFR:</strong> Plug Flow Reactors handle kinetics differently across length than stirred tanks across time.</li>
                         </ul>
                     </div>
                     <div class="formula-block" id="theory-y4">
@@ -84,10 +88,12 @@
                         <p class="formula-text">PROFIT = $ * [F_A0 * X] - (CapEx + OpEx(v²))</p>
                         <p class="theory-desc">The ultimate test. Everything is a trade-off. Forcing 100% conversion costs near-infinite energy. Running pipes perfectly fast requires giant pumps. The thermodynamic "sweet spot" is an inverted parabola.</p>
                         <hr class="term-divider">
-                        <label>VARIABLE DEFINITIONS:</label>
+                        <label>MICRO-CONCEPTS (Y4):</label>
                         <ul class="term-list">
+                            <li><strong>PID Automation:</strong> Proportional-Integral-Derivative controllers automate Y1-Y3 tasks. Kp (Response), Ki (Drift), Kd (Damping).</li>
                             <li><strong>CapEx ($):</strong> Upfront capital expenditure (buying bigger pipes/tanks).</li>
-                            <li><strong>OpEx ($/hr):</strong> Recurring operating expenditure (electricity/heat). Scales roughly with v².</li>
+                            <li><strong>Net Present Value (NPV) & ROI:</strong> Market price fluctuations for feedstock define actual economic viability.</li>
+                            <li><strong>The Inverted U-Curve:</strong> The point at which marginal revenue of product = marginal cost of utilities.</li>
                         </ul>
                     </div>
                 </div>
