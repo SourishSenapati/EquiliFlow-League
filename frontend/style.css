@@ -48,6 +48,7 @@ h1, h2, h3, .serif-heading {
     border: 1px solid var(--glass-border);
     border-radius: 1.5rem;
     box-shadow: var(--shadow-soft);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     transition: var(--transition-fast);
 }
