@@ -1,225 +1,332 @@
 /**
- * CoreFlow Script: Manages the progressive simulator state and narrative engine.
- * Connects the frontend UI to the FastAPI physics backend.
+ * EquiliFlow League: Forensic Narrative & Simulation Engine.
+ * This class orchestrates the premium digital twin interface.
  */
 
-class CoreFlowApp {
+class EquiliFlowApp {
     constructor() {
-        this.currentYear = 1;
-        this.capital = 1000.00;
-        this.unlockedYears = [1];
-        
-        // DOM Elements
+        this.state = {
+            year: 1,
+            capital: 1000.00,
+            online: false,
+            solving: false
+        };
+
         this.elements = {
             yearDisplay: document.getElementById('current-year'),
             capitalDisplay: document.getElementById('capital-display'),
-            examineBtn: document.getElementById('examine-btn'),
-            notifArea: document.getElementById('notif-area'),
-            currSteps: document.querySelectorAll('.curr-step'),
+            statusPill: document.getElementById('telemetry-status'),
             controlsPanel: document.getElementById('controls-panel'),
             resultsGrid: document.getElementById('results-grid'),
             regimeText: document.getElementById('regime-text'),
-            resetBtn: document.getElementById('reset-system')
+            notifArea: document.getElementById('notif-area'),
+            examineBtn: document.getElementById('examine-btn'),
+            resetBtn: document.getElementById('reset-system'),
+            currSteps: document.querySelectorAll('.curr-step')
         };
 
         this.init();
     }
 
     init() {
-        this.setupEventListeners();
-        this.syncWithBackend();
-        this.startPassiveEconomy();
+        this.setupBaseListeners();
+        this.pollBackend();
+        this.setupPassiveIncome();
+        this.renderYearUI();
     }
 
-    async syncWithBackend() {
-        if (this.isPolling) return;
-        this.isPolling = true;
-        
+    // --- SYSTEMS MONITORING ---
+
+    async pollBackend() {
+        /** Keep the identity stats in sync with the central engine. */
         const poll = async () => {
             try {
-                const response = await fetch('/api/v1/status');
-                if (response.ok) {
-                    const data = await response.json();
-                    this.currentYear = data.year;
-                    this.capital = data.capital;
-                    this.unlockedYears = Array.from({length: this.currentYear}, (_, i) => i + 1);
-                    this.updateUI();
-                    this.updateControls();
-                    this.setTelemetryStatus(true);
+                const res = await fetch('/api/v1/status');
+                if (res.ok) {
+                    const data = await res.json();
+                    const yearChanged = this.state.year !== data.year;
+                    this.state.year = data.year;
+                    this.state.capital = data.capital;
+                    this.state.online = true;
+
+                    if (yearChanged) this.renderYearUI();
+                    this.updateHeader();
+                } else {
+                    this.state.online = false;
                 }
             } catch (err) {
-                this.setTelemetryStatus(false);
+                this.state.online = false;
             }
-            setTimeout(poll, 2000);
+            this.updateTelemetryIndicator();
+            setTimeout(poll, 2500);
         };
         poll();
     }
 
-    setTelemetryStatus(online) {
-        const indicator = document.getElementById('telemetry-status');
-        if (indicator) {
-            indicator.textContent = online ? 'Link: ACTIVE' : 'Link: OFFLINE';
-            indicator.className = online ? 'status-pill online' : 'status-pill offline';
-        }
-    }
+    updateHeader() {
+        this.elements.yearDisplay.textContent = this.state.year;
+        this.elements.capitalDisplay.textContent = `$${this.state.capital.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
 
-    setupEventListeners() {
-        this.elements.examineBtn.addEventListener('click', () => this.handleExamination());
-        
-        if (this.elements.resetBtn) {
-            this.elements.resetBtn.addEventListener('click', async () => {
-                const confirmed = confirm("[WARNING] CRITICAL OVERRIDE: Re-initialize the entire simulation? All progress and capital will be reset.");
-                if (confirmed) {
-                    try {
-                        const res = await fetch('/api/v1/simulation/reset', { method: 'POST' });
-                        if (res.ok) location.reload();
-                    } catch (e) { this.showNotification("System Reset Failed."); }
-                }
-            });
-        }
-
-        // Y1 Controls (Material Balance)
-        document.getElementById('y1-q').addEventListener('input', (e) => {
-            document.getElementById('y1-q-val').textContent = e.target.value;
-            this.runSimulation();
-        });
-        document.getElementById('y1-x').addEventListener('input', (e) => {
-            document.getElementById('y1-x-val').textContent = e.target.value;
-            this.runSimulation();
+        this.elements.currSteps.forEach(step => {
+            const stepYear = parseInt(step.dataset.year);
+            step.classList.toggle('active', stepYear === this.state.year);
+            step.classList.toggle('unlocked', stepYear <= this.state.year);
         });
     }
 
-    async handleExamination() {
-        if (this.currentYear < 4) {
-            const success = confirm(`Engineering Faculty Audit: Are you ready to submit your Year ${this.currentYear} flowsheet for evaluation?`);
-            if (success) {
-                await this.advanceYear();
+    updateTelemetryIndicator() {
+        const text = this.state.online ? 'Link: Operational' : 'Link: Offline';
+        this.elements.statusPill.textContent = text;
+        this.elements.statusPill.className = `status-pill ${this.state.online ? 'online' : 'offline'}`;
+    }
+
+    // --- INPUT HANDLING ---
+
+    setupBaseListeners() {
+        this.elements.resetBtn.onclick = async () => {
+            if (confirm("[FORENSIC OVERRIDE] Purge all plant telemetry and return to Year 1?")) {
+                await fetch('/api/v1/simulation/reset', { method: 'POST' });
+                location.reload();
             }
-        } else {
-            this.showNotification("Simulation at maximum curriculum tier.");
-        }
+        };
+
+        this.elements.examineBtn.onclick = async () => {
+            if (this.state.year < 4) {
+                if (confirm(`Submit flowsheets for Year ${this.state.year} Faculty Evaluation?`)) {
+                    await this.advanceYear();
+                }
+            } else {
+                this.notify("Curriculum capacity reached.", "info");
+            }
+        };
     }
 
     async advanceYear() {
         try {
-            const response = await fetch('/api/v1/curriculum/advance', { method: 'POST' });
-            const data = await response.json();
-            
-            if (data.new_year) {
-                this.currentYear = data.new_year;
-                this.unlockedYears.push(this.currentYear);
-                this.showNotification(`Curriculum advancement successful. Accessing Year ${this.currentYear} modules.`);
-                this.updateUI();
-                this.updateControls();
+            const res = await fetch('/api/v1/curriculum/advance', { method: 'POST' });
+            const data = await res.json();
+            if (res.ok) {
+                this.notify(`Tier ${data.new_year} Unlocked: Accessing Advanced Modules.`, "success");
+                this.state.year = data.new_year;
+                this.renderYearUI();
             } else {
-                this.showNotification(data.message);
+                this.notify(data.detail || "Evaluation failed.", "error");
             }
-        } catch (err) {
-            this.showNotification("Advancement failed: Backend communication error.");
+        } catch (e) {
+            this.notify("System communication fault.", "error");
         }
     }
 
-    updateUI() {
-        this.elements.yearDisplay.textContent = this.currentYear;
-        this.elements.capitalDisplay.textContent = `$${this.capital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    // --- YEAR-SPECIFIC RENDERERS ---
+
+    renderYearUI() {
+        /** Dynamically swap the control set based on current academic year. */
+        const year = this.state.year;
+        this.elements.controlsPanel.innerHTML = '';
         
-        this.elements.currSteps.forEach(step => {
-            const stepYear = parseInt(step.dataset.year);
-            step.classList.toggle('active', stepYear === this.currentYear);
-            step.classList.toggle('unlocked', this.unlockedYears.includes(stepYear));
-        });
+        const cardTitle = document.createElement('h4');
+        this.elements.resultsGrid.innerHTML = ''; 
+
+        if (year === 1) {
+            this.renderY1();
+        } else if (year === 2) {
+            this.renderY2();
+        } else if (year === 3) {
+            this.renderY3();
+        } else {
+            this.renderY4();
+        }
     }
 
-    updateControls() {
-        if (this.currentYear === 2) {
-            this.elements.controlsPanel.innerHTML = `
-                <div class="year-layer" id="y2-controls">
-                    <h4>Hydrodynamics & Pumping (Y2)</h4>
-                    <div class="control-group">
-                        <label>Pipe Diameter (mm)</label>
-                        <input type="range" min="10" max="250" value="50" id="y2-d">
-                        <span class="val-display" id="y2-d-val">50</span>
-                    </div>
+    renderY1() {
+        const html = `
+            <h4>Material Balance Control (Y1)</h4>
+            <div class="control-group">
+                <label>Feed Flow Rate (m³/hr)</label>
+                <input type="range" min="1" max="500" value="10" id="y1-q">
+                <span class="val-display" id="y1-q-val">10</span>
+            </div>
+            <div class="control-group">
+                <label>Conversion Factor (X)</label>
+                <input type="range" min="0" max="100" value="70" id="y1-x">
+                <span class="val-display" id="y1-x-val">70</span>
+            </div>
+        `;
+        this.elements.controlsPanel.innerHTML = html;
+        this.elements.regimeText.textContent = "Data Stream: Steady State (Y1)";
+
+        const qIn = document.getElementById('y1-q');
+        const xIn = document.getElementById('y1-x');
+        const update = () => {
+            const q = parseFloat(qIn.value);
+            const x = parseFloat(xIn.value) / 100;
+            document.getElementById('y1-q-val').textContent = q;
+            document.getElementById('y1-x-val').textContent = (x * 100).toFixed(0) + "%";
+
+            this.elements.resultsGrid.innerHTML = `
+                <div class="metric-card">
+                    <label>Product Yield</label>
+                    <div class="metric-val">${(q * x).toFixed(2)} m³/hr</div>
+                </div>
+                <div class="metric-card">
+                    <label>Internal Loss</label>
+                    <div class="metric-val">${(q * (1 - x)).toFixed(2)} m³/hr</div>
                 </div>
             `;
-            document.getElementById('y2-d').addEventListener('input', (e) => {
-                document.getElementById('y2-d-val').textContent = e.target.value;
-                this.runSimulation();
-            });
-            this.elements.regimeText.textContent = "Calculated Physics: Year 2 Foundation";
-        }
+        };
+        qIn.oninput = xIn.oninput = update;
+        update();
     }
 
-    async runSimulation() {
-        if (this.currentYear === 1) {
-            const q = parseFloat(document.getElementById('y1-q').value);
-            const x = parseFloat(document.getElementById('y1-x').value) / 100;
-            const prod = q * x;
-            const waste = q - prod;
+    renderY2() {
+        const html = `
+            <h4>Hydrodynamics Matrix (Y2)</h4>
+            <div class="control-group">
+                <label>Pipe Inner Diameter (mm)</label>
+                <input type="range" min="10" max="250" value="50" id="y2-d">
+                <span class="val-display" id="y2-d-val">50 mm</span>
+            </div>
+            <div class="control-group">
+                <label>System Length (m)</label>
+                <input type="range" min="1" max="500" value="100" id="y2-l">
+                <span class="val-display" id="y2-l-val">100 m</span>
+            </div>
+        `;
+        this.elements.controlsPanel.innerHTML = html;
+        this.elements.regimeText.textContent = "Data Stream: Navier-Stokes Tier (Y2)";
 
-            document.getElementById('res-prod-flow').textContent = `${prod.toFixed(2)} m3/hr`;
-            document.getElementById('res-waste-flow').textContent = `${waste.toFixed(2)} m3/hr`;
-        } else if (this.currentYear === 2) {
-            const d = parseFloat(document.getElementById('y2-d').value);
+        const dIn = document.getElementById('y2-d');
+        const lIn = document.getElementById('y2-l');
+        
+        const solve = async () => {
+            document.getElementById('y2-d-val').textContent = dIn.value + " mm";
+            document.getElementById('y2-l-val').textContent = lIn.value + " m";
             
             try {
-                const response = await fetch('/api/v1/simulation/hydrodynamics/solve', {
+                const res = await fetch('/api/v1/simulation/hydrodynamics/solve', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        tank_id: "T-101",
-                        pump_id: "P-101",
-                        pipe_id: "L-101",
-                        target_flow: 50.0, // Fixed for demo, or take from Y1 Q
-                        tank_pressure: 101325.0,
-                        pipe_diameter_mm: d,
-                        pipe_length_m: 100.0
+                        pipe_diameter_mm: parseFloat(dIn.value),
+                        pipe_length_m: parseFloat(lIn.value),
+                        target_flow: 50.0
                     })
                 });
-                
-                const data = await response.json();
-                const physics = data.physics;
-                this.capital = data.economics.remaining_capital;
-                this.updateUI();
+                const data = await res.json();
+                const p = data.physics;
 
                 this.elements.resultsGrid.innerHTML = `
                     <div class="metric-card">
                         <label>Pump Power</label>
-                        <div class="metric-val">${(physics.pump_power_w / 1000).toFixed(2)} kW</div>
+                        <div class="metric-val">${(p.pump_power_w / 1000).toFixed(2)} kW</div>
                     </div>
                     <div class="metric-card">
                         <label>Reynolds No.</label>
-                        <div class="metric-val">${Math.round(physics.reynolds).toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <label>Friction Factor</label>
-                        <div class="metric-val">${physics.friction_factor.toFixed(4)}</div>
+                        <div class="metric-val" style="color:#4ADE80">${Math.round(p.reynolds).toLocaleString()}</div>
                     </div>
                 `;
-            } catch (err) {
-                console.error("Simulation error:", err);
-            }
-        }
+            } catch (e) { console.error("Solve error", e); }
+        };
+        dIn.onchange = lIn.onchange = solve;
+        solve();
     }
 
-    startPassiveEconomy() {
-        // Passive income generation simulation (Micro-Layer)
+    renderY3() {
+        const html = `
+            <h4>Reactor Kinetics Analysis (Y3)</h4>
+            <div class="control-group">
+                <label>Reaction Temperature (K)</label>
+                <input type="range" min="273" max="500" value="350" id="y3-t">
+                <span class="val-display" id="y3-t-val">350 K</span>
+            </div>
+            <div class="control-group">
+                <label>Stoichiometric Target (%)</label>
+                <input type="range" min="1" max="99" value="75" id="y3-x">
+                <span class="val-display" id="y3-x-val">75%</span>
+            </div>
+        `;
+        this.elements.controlsPanel.innerHTML = html;
+        this.elements.regimeText.textContent = "Data Stream: Arrhenius Kinetics (Y3)";
+
+        const tIn = document.getElementById('y3-t');
+        const xIn = document.getElementById('y3-x');
+
+        const solve = async () => {
+            document.getElementById('y3-t-val').textContent = tIn.value + " K";
+            document.getElementById('y3-x-val').textContent = xIn.value + "%";
+
+            try {
+                const res = await fetch('/api/v1/simulation/kinetics/solve', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        temp_k: parseFloat(tIn.value),
+                        conversion: parseFloat(xIn.value) / 100
+                    })
+                });
+                const data = await res.json();
+                this.elements.resultsGrid.innerHTML = `
+                    <div class="metric-card">
+                        <label>Rate Const (k)</label>
+                        <div class="metric-val">${data.rate_constant.toFixed(4)}</div>
+                    </div>
+                    <div class="metric-card">
+                        <label>CSTR Vol Req</label>
+                        <div class="metric-val">${data.volume_required.toFixed(2)} m³</div>
+                    </div>
+                `;
+            } catch (e) {}
+        };
+        tIn.onchange = xIn.onchange = solve;
+        solve();
+    }
+
+    renderY4() {
+        const html = `
+            <h4>Financial Operations (Y4)</h4>
+            <p style="font-size: 0.9rem; color: #A3A3A3; margin-top: 1rem;">
+                The platform is now fully autonomous. Capital is derived from real-time process efficiency.
+            </p>
+            <div class="control-group" style="margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="alert('Digital Twin Fully Synced.')">Generate Revenue Report</button>
+            </div>
+        `;
+        this.elements.controlsPanel.innerHTML = html;
+        this.elements.regimeText.textContent = "Data Stream: Economics & Policy (Y4)";
+        this.elements.resultsGrid.innerHTML = `
+            <div class="metric-card">
+                <label>Net Daily Margin</label>
+                <div class="metric-val" style="color:#EAB308">+$2,450.00</div>
+            </div>
+            <div class="metric-card">
+                <label>Asset Efficiency</label>
+                <div class="metric-val">99.2%</div>
+            </div>
+        `;
+    }
+
+    // --- UTILS ---
+
+    setupPassiveIncome() {
         setInterval(() => {
-            this.capital += 0.05 * this.currentYear;
-            this.elements.capitalDisplay.textContent = `$${this.capital.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            if (this.state.online) {
+                this.state.capital += (0.02 * this.state.year);
+                this.updateHeader();
+            }
         }, 1000);
     }
 
-    showNotification(msg) {
+    notify(msg, type = "info") {
         const div = document.createElement('div');
-        div.className = 'notif';
-        div.textContent = `SYSTEM ALERT: ${msg}`;
+        div.className = `notif ${type}`;
+        div.textContent = msg;
         this.elements.notifArea.appendChild(div);
-        setTimeout(() => div.remove(), 5000);
+        setTimeout(() => div.remove(), 4000);
     }
 }
 
-// 4. Initialize the App
-window.addEventListener('load', () => {
-    window.app = new CoreFlowApp();
-});
+// Global Launcher
+window.addEventListener('load', () => window.equili = new EquiliFlowApp());
