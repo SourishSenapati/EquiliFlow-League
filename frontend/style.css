@@ -329,25 +329,289 @@ input[type=range]::-webkit-slider-thumb {
     color: white;
 }
 
-/* Desktop Only - Disable Mobile Scaling for Terminal feel */
-@media (max-width: 1024px) {
-    main.sim-hub {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-    }
+/* Educational Pane */
+.educational-pane {
+    padding: 1.5rem;
+    border: 1px solid var(--glass-border);
 }
 
-@media (max-width: 768px) {
-    header.narrative-header {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    .status-bar {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .ui-dash {
-        grid-template-columns: 1fr;
-    }
+.formula-block {
+    display: none;
+}
+
+.formula-block.active {
+    display: block;
+    animation: fadeIn 0.1s;
+}
+
+.formula-text {
+    font-size: 1.3rem;
+    color: var(--terminal-green);
+    margin: 1rem 0;
+    font-weight: bold;
+    padding: 1rem;
+    border: 1px dashed var(--terminal-green);
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.theory-desc {
+    color: var(--muted-silver);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    text-transform: none; /* Make reading paragraph text easier */
+}
+
+.term-divider {
+    border: none;
+    border-top: 1px dashed var(--glass-border);
+    margin: 1rem 0;
+}
+
+.term-list {
+    list-style-type: square;
+    margin-left: 2rem;
+    color: var(--muted-silver);
+    text-transform: none;
+}
+
+.term-list strong {
+    color: var(--electric-blue);
+    text-transform: uppercase;
+}
+
+.terminal-loader {
+    margin-top: 1rem;
+    color: var(--electric-blue);
+    font-size: 0.85rem;
+    text-align: left;
+    width: 100%;
+}
+
+.text-gold {
+    color: var(--iconic-gold);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* PHASE NAVIGATOR */
+.phase-navigator {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+    background: #050505;
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.phase-selector {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.phase-tab {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--muted-silver);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.phase-tab.active {
+    border-color: var(--electric-blue);
+    color: var(--electric-blue);
+    background: rgba(255, 153, 0, 0.1);
+}
+
+/* SPREADSHEET GRID */
+.grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.grid-table th {
+    background: #111;
+    color: var(--electric-blue);
+    text-align: left;
+    padding: 0.75rem;
+    border: 1px solid var(--glass-border);
+}
+
+.grid-table td {
+    padding: 0.75rem;
+    border: 1px solid var(--glass-border);
+    color: var(--terminal-green);
+}
+
+.grid-table tr:hover {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.spreadsheet-view {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.spreadsheet-container {
+    height: 350px;
+    overflow-y: auto;
+    background: #000;
+}
+
+/* 4-SIGMA INDICATOR */
+.sigma-badge {
+    font-size: 0.7rem;
+    background: #1a1a1a;
+    color: #00ff00;
+    padding: 2px 4px;
+    border: 1px solid #00ff00;
+    margin-left: 5px;
+}
+
+.reliability-save {
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { border-color: #444; }
+    50% { border-color: #00ff00; }
+    100% { border-color: #444; }
+}
+
+/* MISSION UI ENHANCEMENTS */
+.mission-sub {
+    font-size: 0.8rem;
+    color: var(--muted-silver);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 5px;
+    text-transform: none;
+}
+
+.formula-box {
+    background: #111;
+    border: 1px solid var(--terminal-green);
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.formula-text {
+    color: var(--terminal-green);
+    font-size: 1.1rem !important;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+.mission-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    border-top: 1px dashed var(--glass-border);
+    padding-top: 1rem;
+    font-size: 0.8rem;
+}
+
+.btn-tiny {
+    padding: 2px 10px;
+    background: var(--void-black);
+    border: 1px solid var(--electric-blue);
+    color: var(--electric-blue);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;
+}
+
+.btn-tiny:hover {
+    background: var(--electric-blue);
+    color: var(--void-black);
+}
+
+.placeholder-msg {
+    color: var(--muted-silver);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* ASSET MANAGEMENT */
+.asset-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.asset-card {
+    background: #080808;
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+}
+
+.asset-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin: 0.5rem 0;
+    color: var(--muted-silver);
+    text-transform: none;
+}
+
+.asset-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.btn-gold {
+    border-color: var(--iconic-gold);
+    color: var(--iconic-gold);
+}
+
+.btn-gold:hover {
+    background: var(--iconic-gold);
+    color: var(--void-black);
+}
+
+.upgrade-progress {
+    margin-top: 1rem;
+    border-top: 1px dashed var(--glass-border);
+    padding-top: 0.5rem;
+}
+
+.prog-bar {
+    height: 4px;
+    background: var(--iconic-gold);
+    width: 0%;
+    margin-bottom: 0.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.prog-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background-image: linear-gradient(-45deg, rgba(255,255,255,.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.2) 50%, rgba(255,255,255,.2) 75%, transparent 75%, transparent);
+    background-size: 20px 20px;
+    animation: move 2s linear infinite;
+}
+
+@keyframes move {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 20px; }
+}
+
+.prog-timer {
+    font-size: 0.75rem;
+    color: var(--iconic-gold);
+    font-family: monospace;
 }

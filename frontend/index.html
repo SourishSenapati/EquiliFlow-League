@@ -6,6 +6,7 @@
     <title>EquiliFlow League | Chemical Engineering Digital Twin</title>
     <!-- Monospace Terminal Fonts (System Default) -->
     <link rel="stylesheet" href="style.css">
+    <script src="curriculum.js"></script>
     <!-- Meta for SEO and Premium Identity -->
     <meta name="description" content="A high-fidelity, narrative-driven 4-year chemical engineering simulation.">
 
@@ -32,125 +33,61 @@
         <!-- Sidebar: The Hierarchy of Depth Applied -->
         <aside class="sidebar-sim stage">
             <h3>Domains of Mastery</h3>
-            <ul class="curriculum-list">
-                <li class="curr-step active" data-year="1">01. Material Balancing</li>
-                <li class="curr-step" data-year="2">02. Hydrodynamics</li>
-                <li class="curr-step" data-year="3">03. Reaction Kinetics</li>
-                <li class="curr-step" data-year="4">04. Design & Economics</li>
+            <ul class="curriculum-list" id="domain-list">
+                <!-- Data-driven domains will be injected here -->
+                <li class="loading-item">Initializing Syllabus...</li>
             </ul>
         </aside>
 
         <section class="viewport-sim">
-            <!-- Educational Physics Hub (Bloomberg Style) -->
-            <div class="educational-pane stage">
-                <h4>[LEARNING MODULE]: Governing Dynamics</h4>
-                <div class="theory-grid" id="theory-grid">
-                    <!-- Dynamic formulas will appear here -->
-                    <div class="formula-block active" id="theory-y1">
-                        <label>MODULE 01: THE LAW OF CONSERVATION</label>
-                        <p class="formula-text">ACCUMULATION = IN - OUT + GENERATION - CONSUMPTION</p>
-                        <p class="theory-desc">Before dealing with thermodynamics or fluid friction, a process engineer must ensure mass is conserved. Adjusting 'Feed Flow Rate' (Q) dictates inputs. 'Target Conversion' (X) defines the generation/consumption of limiting reactants. Imbalances will literally overflow the tanks.</p>
-                        <hr class="term-divider">
-                        <label>MICRO-CONCEPTS (Y1):</label>
-                        <ul class="term-list">
-                            <li><strong>Q (m³/hr):</strong> Volumetric Flow Rate. Directly proportional to pump CapEx.</li>
-                            <li><strong>X (%):</strong> Conversion Factor. (N_A0 - N_A)/N_A0. Approaching 100% requires exponential reactor volume (V).</li>
-                            <li><strong>Split Ratios:</strong> Mismanaging the recycle loop will cause steady-state accumulation.</li>
-                        </ul>
-                    </div>
-                    <div class="formula-block" id="theory-y2">
-                        <label>MODULE 02: HYDRODYNAMICS & BERNOULLI</label>
-                        <p class="formula-text">P_PUMP / ρ + v²/2 = ΔZ * g + f(L/D)(v²/2)</p>
-                        <p class="theory-desc">Pushing fluid through a pipe generates friction. To maintain flow, a pump must supply enough head to overcome elevation changes (ΔZ) and friction loss (Moody friction factor 'f').</p>
-                        <hr class="term-divider">
-                        <label>MICRO-CONCEPTS (Y2):</label>
-                        <ul class="term-list">
-                            <li><strong>Re (Reynolds No.):</strong> ρvD/μ. Determines if flow is Laminar (< 2000) or Turbulent (> 4000).</li>
-                            <li><strong>CapEx vs. OpEx Tradeoff:</strong> Larger pipe diameter = less friction (lower OpEx for pumps), but higher upfront cost (CapEx).</li>
-                            <li><strong>Pump Sizing:</strong> Pump brake horsepower = (Q * ΔP) / (η). Inefficiencies generate waste heat.</li>
-                        </ul>
-                    </div>
-                    <div class="formula-block" id="theory-y3">
-                        <label>MODULE 03: REACTION KINETICS (ARRHENIUS)</label>
-                        <p class="formula-text">k = A * e^(-E_a / (R * T))</p>
-                        <p class="theory-desc">Chemical reactions depend exponentially on temperature. Heating a Continuous Stirred-Tank Reactor (CSTR) increases reaction rate (k) dramatically, but risks runaway thermal explosions and costs massive energy.</p>
-                        <hr class="term-divider">
-                        <label>MICRO-CONCEPTS (Y3):</label>
-                        <ul class="term-list">
-                            <li><strong>T (Kelvin):</strong> System Temperature. The apex control variable.</li>
-                            <li><strong>System Runaway:</strong> Exothermic reactions generate extra heat, driving T higher, looping the Arrhenius function until node failure.</li>
-                            <li><strong>E_a (kJ/mol):</strong> Activation Energy. Catalysts synthesize pathways to map this value lower, saving thermal CapEx.</li>
-                            <li><strong>CSTR vs. PFR:</strong> Plug Flow Reactors handle kinetics differently across length than stirred tanks across time.</li>
-                        </ul>
-                    </div>
-                    <div class="formula-block" id="theory-y4">
-                        <label>MODULE 04: ECONOMICS & INVERTED CURVES</label>
-                        <p class="formula-text">PROFIT = $ * [F_A0 * X] - (CapEx + OpEx(v²))</p>
-                        <p class="theory-desc">The ultimate test. Everything is a trade-off. Forcing 100% conversion costs near-infinite energy. Running pipes perfectly fast requires giant pumps. The thermodynamic "sweet spot" is an inverted parabola.</p>
-                        <hr class="term-divider">
-                        <label>MICRO-CONCEPTS (Y4):</label>
-                        <ul class="term-list">
-                            <li><strong>PID Automation:</strong> Proportional-Integral-Derivative controllers automate Y1-Y3 tasks. Kp (Response), Ki (Drift), Kd (Damping).</li>
-                            <li><strong>CapEx ($):</strong> Upfront capital expenditure (buying bigger pipes/tanks).</li>
-                            <li><strong>Net Present Value (NPV) & ROI:</strong> Market price fluctuations for feedstock define actual economic viability.</li>
-                            <li><strong>The Inverted U-Curve:</strong> The point at which marginal revenue of product = marginal cost of utilities.</li>
-                        </ul>
-                    </div>
+            <!-- Phase Navigation Bar -->
+            <div class="phase-navigator stage">
+                <div class="phase-selector" id="phase-selector">
+                    <button class="phase-tab active" onclick="app.setPhase(1)">PHASE 01: FLUID_DYNAMICS</button>
+                    <button class="phase-tab" onclick="app.setPhase(2)">PHASE 02: THERMAL_STABILITY</button>
+                    <button class="phase-tab" onclick="app.setPhase(3)">PHASE 03: REACTION_YIELD</button>
+                    <button class="phase-tab" onclick="app.setPhase(4)">PHASE 04: AI_OPTIMIZATION</button>
                 </div>
             </div>
 
-            <!-- Viewport: The Stage -->
-            <div class="canvas-container stage">
-                <div class="plant-visual" id="canvas-area">
-                    <div class="visual-placeholder">
-                        <p id="regime-text">DATA STREAM: INITIALIZING...</p>
-                        <div class="terminal-loader" id="terminal-loader">
-                            > SYSTEM_CHECK: NOMINAL <br>
-                            > LOADING PHYSICS_ENGINE(REYNOLDS, ARRHENIUS)... DONE <br>
-                        </div>
-                    </div>
+            <!-- Learning Pane: Compact Table Style -->
+            <div class="educational-pane stage spreadsheet-view">
+                <div id="theory-grid">
+                    <!-- Spreadsheet-style learning content here -->
                 </div>
             </div>
 
-            <div class="ui-dash">
-                <!-- Controls: Operational Analytics Layer -->
+            <!-- Asset Spreadsheet View -->
+            <div class="canvas-container stage spreadsheet-container">
+                <table class="grid-table" id="asset-spreadsheet">
+                    <thead>
+                        <tr>
+                            <th>ASSET_ID</th>
+                            <th>TYPE</th>
+                            <th>TIER</th>
+                            <th>DURABILITY</th>
+                            <th>EFFICIENCY</th>
+                            <th>MAINTENANCE_COST</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="asset-table-body">
+                        <!-- Spreadsheet rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ui-dash spreadsheet-controls">
+                <!-- Data Entry & Simulation Matrix -->
                 <div class="controls-panel stage" id="controls-panel">
-                    <!-- Year 1 Controls (Initial State) -->
-                    <div class="year-layer" id="y1-controls">
-                        <h4>[CTRL_PANEL]: Flow Matrix (Y1)</h4>
-                        <div class="control-group">
-                            <label for="y1-q">Feed Flow Rate (Q_in) [m³/hr]</label>
-                            <input type="range" min="0" max="100" value="10" id="y1-q" title="Feed Flow Control">
-                            <span class="val-display" id="y1-q-val">10</span>
-                        </div>
-                        <div class="control-group">
-                            <label for="y1-x">Target Conversion (X_A) [%]</label>
-                            <input type="range" min="0" max="100" value="70" id="y1-x" title="Conversion Control">
-                            <span class="val-display" id="y1-x-val">70</span>
-                        </div>
-                    </div>
+                    <!-- Spreadsheet-style controls here -->
                 </div>
 
-                <!-- Simulation Real-time Data: Forensic Analysis Layer -->
+                <!-- Simulation Analytics Matrix -->
                 <div class="results-panel stage">
-                    <h4>[TELEM]: Operational Analytics</h4>
-                    <div class="results-grid" id="results-grid">
-                        <div class="metric-card">
-                            <label>Product Yield (F_B)</label>
-                            <div class="metric-val" id="res-prod-flow">0.00</div>
-                        </div>
-                        <div class="metric-card">
-                            <label>Waste Stream (F_W)</label>
-                            <div class="metric-val" id="res-waste-flow">0.00</div>
-                        </div>
-                        <div class="metric-card">
-                            <label>Thermodynamic Eff.</label>
-                            <div class="metric-val text-gold">94.2%</div>
-                        </div>
-                        <div class="metric-card">
-                            <label>System Integrity</label>
-                            <div class="metric-val">STABLE</div>
-                        </div>
+                    <h4>[MATRIX]: Real-time Data Output</h4>
+                    <div class="spreadsheet-results" id="results-grid">
+                        <!-- Linearized results -->
                     </div>
                 </div>
             </div>
