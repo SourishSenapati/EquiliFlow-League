@@ -1,0 +1,16 @@
+{
+  "id": "D10_L3",
+  "title": "CHP Cogeneration Efficiency",
+  "formula": "\u03b7_chp = (Qth + Wel) / Qf",
+  "theory": "Optimizing site Heat & Power assets. Maximizing thermal recapture from site-wide gas turbines.",
+  "variables": [
+    {
+      "sym": "Qth",
+      "def": "Thermal Out"
+    },
+    {
+      "sym": "Wel",
+      "def": "Elec Out"
+    }
+  ]
+}

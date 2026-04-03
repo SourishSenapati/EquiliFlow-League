@@ -1,0 +1,16 @@
+{
+  "id": "D1_L1",
+  "title": "Bernoulli's Continuum",
+  "formula": "P + 1/2\u03c1v\u00b2 + \u03c1gh = C",
+  "theory": "Conservation of mechanical energy for inviscid, incompressible flow. Analyzing how static pressure converts to kinetic energy in a frictionless venturi.",
+  "variables": [
+    {
+      "sym": "P",
+      "def": "Static Pressure (Pa)"
+    },
+    {
+      "sym": "v",
+      "def": "Velocity (m/s)"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "D3_L4",
+  "title": "Selectivity/Profit Sensitivity",
+  "formula": "Max Margins s.t. Conversion",
+  "theory": "Principal Site Challenge: Maximizing high-value product yield while minimizing hazardous byproducts via temperature sweep.",
+  "variables": [
+    {
+      "sym": "\u03a6",
+      "def": "Yield"
+    },
+    {
+      "sym": "$",
+      "def": "Operating Profit"
+    }
+  ]
+}

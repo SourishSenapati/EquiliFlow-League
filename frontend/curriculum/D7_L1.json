@@ -1,0 +1,16 @@
+{
+  "id": "D7_L1",
+  "title": "Capex Cost Escalation",
+  "formula": "C2 = C1 * (I2/I1)",
+  "theory": "Adjusting historical equipment costs using modern CEPCI indices to estimate project capital requirements.",
+  "variables": [
+    {
+      "sym": "C1",
+      "def": "Base Cost"
+    },
+    {
+      "sym": "I",
+      "def": "Cost Index"
+    }
+  ]
+}

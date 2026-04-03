@@ -1,0 +1,16 @@
+{
+  "id": "D4_L4",
+  "title": "Membrane Partitioning AI",
+  "formula": "J = P/l * \u0394p",
+  "theory": "Integrating zero-emission membrane harvesting into the site core to replace traditional high-cost distillation.",
+  "variables": [
+    {
+      "sym": "P",
+      "def": "Permeability"
+    },
+    {
+      "sym": "l",
+      "def": "Layer Thickness"
+    }
+  ]
+}

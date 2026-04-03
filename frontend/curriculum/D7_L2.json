@@ -1,0 +1,16 @@
+{
+  "id": "D7_L2",
+  "title": "Operating Marginal Break-Even",
+  "formula": "BEP = Fixed_Costs / (P - V)",
+  "theory": "Analyzing site profitability. Determining the break-even point in units based on feed and price volatility.",
+  "variables": [
+    {
+      "sym": "P",
+      "def": "Unit Price"
+    },
+    {
+      "sym": "V",
+      "def": "Variable Cost"
+    }
+  ]
+}

@@ -1,17 +1,24 @@
-FROM python:3.9-slim
+# Use a high-performance, official Python runtime
+FROM python:3.11-slim-bullseye
 
-# Expose port and disable python output buffering
+# Environment config: Optimize for Cloud deployments
 ENV PORT=8181
-ENV PYTHONUNBUFFERED=True
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
+# Working directory
 WORKDIR /app
 
-# Copy requirements and install
+# Install dependencies before code to leverage Docker cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all files
-COPY . ./
+# Copy project files
+COPY . .
 
-# Use python to run main.py natively catching the PORT env
+# Expose target port
+EXPOSE 8181
+
+# Command to run uvicorn
+# We run main.py which starts uvicorn on the correct $PORT
 CMD ["python", "main.py"]

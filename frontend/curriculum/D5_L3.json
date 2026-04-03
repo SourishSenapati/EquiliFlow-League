@@ -1,0 +1,16 @@
+{
+  "id": "D5_L3",
+  "title": "Cascade Control Strategy",
+  "formula": "Outer_Loop -> Inner_Settpoint",
+  "theory": "Tuning reactor cores using slave/master interaction. Eliminating feed temperature noise before it hits the core.",
+  "variables": [
+    {
+      "sym": "SP",
+      "def": "Setpoint"
+    },
+    {
+      "sym": "CV",
+      "def": "Controlled Var"
+    }
+  ]
+}

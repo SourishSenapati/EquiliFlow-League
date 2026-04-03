@@ -4,98 +4,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EquiliFlow League | Chemical Engineering Digital Twin</title>
-    <!-- Monospace Terminal Fonts (System Default) -->
+    <meta name="description" content="The premium chemical engineering digital twin platform. 4-year industrial simulation with GPU-accelerated AI.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
     <script src="curriculum.js"></script>
-    <!-- Meta for SEO and Premium Identity -->
-    <meta name="description" content="A high-fidelity, narrative-driven 4-year chemical engineering simulation.">
-
 </head>
-<body class="dark-theme">
+<body>
 
-    <!-- Narrative Header -->
-    <header class="narrative-header">
-        <div class="logo-container">
-            <span class="logo-text">EquiliFlow</span>
-            <span class="logo-badge">League</span>
+    <!-- Animated Background Canvas -->
+    <div class="bg-canvas" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
+    <!-- Floating Navigation Bar -->
+    <nav class="liquid-nav" id="main-header">
+        <div class="nav-logo">
+            <div class="logo-mark">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <circle cx="15" cy="15" r="14" stroke="url(#svgGrad1)" stroke-width="1.5"/>
+                    <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="url(#svgGrad2)" opacity="0.9"/>
+                    <circle cx="15" cy="15" r="3.5" fill="white" opacity="0.85"/>
+                    <defs>
+                        <linearGradient id="svgGrad1" x1="0" y1="0" x2="30" x2="30" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#a78bfa"/><stop offset="1" stop-color="#38bdf8"/>
+                        </linearGradient>
+                        <linearGradient id="svgGrad2" x1="8" y1="8" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#c4b5fd"/><stop offset="1" stop-color="#7dd3fc"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="logo-wordmark">
+                <span class="logo-primary">EquiliFlow</span>
+                <span class="logo-tag">League · Digital Twin</span>
+            </div>
         </div>
-        <nav class="status-bar">
-            <div class="status-item"><span id="telemetry-status" class="status-pill offline">Link: Offline</span></div>
-            <div class="status-item">Level: <span id="current-year" class="serif-heading">1</span></div>
-            <div class="status-item">Capital: <span id="capital-display" class="serif-heading">$1,000.00</span></div>
-            <button class="btn btn-secondary" id="reset-system" title="Purge State & Restart">Reset Override</button>
-            <button class="btn btn-primary" id="examine-btn">Submit Insight</button>
-        </nav>
-    </header>
 
-    <!-- Main Simulator Hub -->
-    <main class="sim-hub">
-        <!-- Sidebar: The Hierarchy of Depth Applied -->
-        <aside class="sidebar-sim stage">
-            <h3>Domains of Mastery</h3>
-            <ul class="curriculum-list" id="domain-list">
-                <!-- Data-driven domains will be injected here -->
-                <li class="loading-item">Initializing Syllabus...</li>
+        <div class="nav-status-cluster">
+            <div class="status-chip" id="telemetry-status">
+                <span class="status-pulse" id="status-pulse"></span>
+                <span class="status-label" id="status-label">Connecting…</span>
+            </div>
+            <div class="stat-pill" title="Academic Year">
+                <i data-lucide="graduation-cap" class="stat-icon"></i>
+                <span class="stat-value">Year&nbsp;<strong id="current-year">1</strong></span>
+            </div>
+            <div class="stat-pill" title="Capital">
+                <i data-lucide="trending-up" class="stat-icon"></i>
+                <span class="stat-value"><strong id="capital-display">$1,000.00</strong></span>
+            </div>
+            <div class="stat-pill ws-badge" title="WebSocket Stream">
+                <i data-lucide="radio" class="stat-icon"></i>
+                <span class="stat-value" id="ws-hz">–– Hz</span>
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <div class="reset-system-wrap" id="reset-btn" title="Reset Simulation">
+                <i data-lucide="rotate-ccw"></i>
+            </div>
+            <button class="liquid-btn" id="examine-btn">
+                <i data-lucide="send"></i>
+                Submit Insight
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN APP SHELL -->
+    <div class="app-shell">
+        
+        <aside class="sidebar liquid-glass">
+            
+            <!-- User Profile Card -->
+            <div class="user-profile" id="user-card">
+                <div class="user-avatar-wrap">
+                    <div class="user-avatar">SS</div>
+                    <div class="user-pro-badge" id="pro-badge">FREE</div>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Sourish Senapati</div>
+                    <div class="user-role" id="user-role">Student (Year 1)</div>
+                </div>
+                <div class="user-stats">
+                    <div class="user-stat-row">
+                        <span class="stat-label">CHELL Credits</span>
+                        <span class="stat-count" id="chell-credits">5 / 5</span>
+                    </div>
+                    <div class="stat-progress-bar">
+                        <div class="stat-progress-fill" id="chell-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-title">
+                <i data-lucide="book-open"></i>
+                <span>Curriculum</span>
+            </div>
+            <ul class="domain-nav" id="domain-list">
+                <li class="domain-item loading">
+                    <div class="domain-skeleton"></div>
+                    <div class="domain-skeleton short"></div>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-title">
+                <i data-lucide="blocks"></i>
+                <span>Digital Nexus</span>
+            </div>
+            <ul class="tool-nav">
+                <li class="tool-item" id="btn-portfolio">
+                    <i data-lucide="user-circle"></i>
+                    <span>Portfolio Builder</span>
+                    <span class="tool-badge">PRO</span>
+                </li>
+                <li class="tool-item" id="btn-cv-extractor">
+                    <i data-lucide="file-search"></i>
+                    <span>CV Intelligence</span>
+                </li>
+                <li class="tool-item" id="btn-ppt-gen">
+                    <i data-lucide="presentation"></i>
+                    <span>PPT Generator</span>
+                </li>
             </ul>
         </aside>
 
-        <section class="viewport-sim">
-            <!-- Phase Navigation Bar -->
-            <div class="phase-navigator stage">
-                <div class="phase-selector" id="phase-selector">
-                    <button class="phase-tab active" onclick="app.setPhase(1)">PHASE 01: FLUID_DYNAMICS</button>
-                    <button class="phase-tab" onclick="app.setPhase(2)">PHASE 02: THERMAL_STABILITY</button>
-                    <button class="phase-tab" onclick="app.setPhase(3)">PHASE 03: REACTION_YIELD</button>
-                    <button class="phase-tab" onclick="app.setPhase(4)">PHASE 04: AI_OPTIMIZATION</button>
+        <main class="content-area">
+            
+            <!-- PHASE TABS -->
+            <div class="phase-tabs liquid-glass">
+                <div class="tab-track" id="phase-selector">
+                    <button class="phase-btn active" data-phase="1" onclick="app.setPhase(1)">
+                        <i data-lucide="droplets"></i><span>Fluid Dynamics</span>
+                    </button>
+                    <button class="phase-btn" data-phase="2" onclick="app.setPhase(2)">
+                        <i data-lucide="flame"></i><span>Thermal Stability</span>
+                    </button>
+                    <button class="phase-btn" data-phase="3" onclick="app.setPhase(3)">
+                        <i data-lucide="atom"></i><span>Reaction Yield</span>
+                    </button>
+                    <button class="phase-btn" data-phase="4" onclick="app.setPhase(4)">
+                        <i data-lucide="brain-circuit"></i><span>AI Optimization</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Learning Pane: Compact Table Style -->
-            <div class="educational-pane stage spreadsheet-view">
-                <div id="theory-grid">
-                    <!-- Spreadsheet-style learning content here -->
+            <!-- DASHBOARD GRID -->
+            <div class="main-split">
+                
+                <!-- THEORY PANE -->
+                <div class="theory-pane liquid-glass">
+                    <div id="theory-grid" class="theory-content">
+                        <!-- Injected by JS -->
+                    </div>
                 </div>
+
+                <!-- MOLECULAR ENGINE -->
+                <div class="game-pane liquid-glass">
+                    <div class="pane-header">
+                        <div class="pane-header-content">
+                            <i data-lucide="gamepad-2" class="pane-header-icon"></i>
+                            <span class="pane-header-title">MOLECULAR FACTORY</span>
+                        </div>
+                        <div class="stat-tag">SUB-ATOM PRECISION</div>
+                    </div>
+                    <div class="game-container">
+                        <canvas id="game-canvas" class="game-canvas"></canvas>
+                        <div class="game-overlay">
+                            <div class="game-controls">
+                                <button class="game-btn" id="spawn-mol" title="Inject Molecules">
+                                    <i data-lucide="plus"></i>
+                                </button>
+                                <button class="game-btn" id="heat-box" title="Thermal Chaos">
+                                    <i data-lucide="flame"></i>
+                                </button>
+                                <button class="game-btn" id="cool-box" title="Cryo Stabilization">
+                                    <i data-lucide="snowflake"></i>
+                                </button>
+                            </div>
+                            <div class="physics-readout">
+                                <div>Kinetic Energy: <span id="kin-e">0.00</span> J</div>
+                                <div>Net Entropy: <span id="entropy-val">0.00</span> J/K</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REACTOR VIEW -->
+                <div class="reactor-pane liquid-glass">
+                    <div class="pane-header">
+                        <div class="pane-header-content">
+                            <i data-lucide="activity" class="pane-header-icon"></i>
+                            <span class="pane-header-title">SYSTEM OVERVIEW</span>
+                        </div>
+                        <div class="reactor-indicators">
+                            <div class="indicator-chip" id="flow-chip">Q: --</div>
+                            <div class="indicator-chip" id="temp-chip">T: --</div>
+                            <div class="indicator-chip" id="conv-chip">X: --</div>
+                        </div>
+                    </div>
+                    <canvas id="reactor-canvas" class="reactor-canvas"></canvas>
+                </div>
+
             </div>
 
-            <!-- Asset Spreadsheet View -->
-            <div class="canvas-container stage spreadsheet-container">
-                <table class="grid-table" id="asset-spreadsheet">
+            <!-- ASSET REGISTRY -->
+            <div class="asset-registry liquid-glass">
+                <div class="pane-header">
+                    <div class="pane-header-content">
+                        <i data-lucide="database" class="pane-header-icon"></i>
+                        <span class="pane-header-title">ASSET REGISTRY</span>
+                    </div>
+                    <div class="asset-registry-header">4-SIGMA VALIDATED</div>
+                </div>
+                <table class="asset-table">
                     <thead>
                         <tr>
-                            <th>ASSET_ID</th>
-                            <th>TYPE</th>
-                            <th>TIER</th>
-                            <th>DURABILITY</th>
-                            <th>EFFICIENCY</th>
-                            <th>MAINTENANCE_COST</th>
-                            <th>ACTIONS</th>
+                            <th>Asset ID</th>
+                            <th>Type</th>
+                            <th>Tier</th>
+                            <th>Durability</th>
+                            <th>Efficiency</th>
+                            <th>Maintenance</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="asset-table-body">
-                        <!-- Spreadsheet rows injected here -->
+                        <!-- Injected by JS -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="ui-dash spreadsheet-controls">
-                <!-- Data Entry & Simulation Matrix -->
-                <div class="controls-panel stage" id="controls-panel">
-                    <!-- Spreadsheet-style controls here -->
-                </div>
+        </main>
+    </div>
 
-                <!-- Simulation Analytics Matrix -->
-                <div class="results-panel stage">
-                    <h4>[MATRIX]: Real-time Data Output</h4>
-                    <div class="spreadsheet-results" id="results-grid">
-                        <!-- Linearized results -->
-                    </div>
-                </div>
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-stack" id="notif-area"></div>
+
+    <!-- MODAL SYSTEM -->
+    <div class="modal-overlay" id="tool-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Tool Name</h2>
+                <button class="close-btn" id="modal-close" onclick="app.closeModal()" title="Close Tool Modal">
+                    <i data-lucide="x"></i>
+                </button>
             </div>
-        </section>
-    </main>
-
-    <!-- Notification Engine (Glass Layer) -->
-    <div class="notification-area" id="notif-area"></div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

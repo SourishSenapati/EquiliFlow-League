@@ -1,0 +1,16 @@
+{
+  "id": "D10_L1",
+  "title": "Brake Horsepower Utility",
+  "formula": "BHP = (Q*H*SG) / (3960*\u03b7)",
+  "theory": "Utility Load Calculation. Determining motor power required for site-wide cooling water circulation.",
+  "variables": [
+    {
+      "sym": "BHP",
+      "def": "Mech Power"
+    },
+    {
+      "sym": "\u03b7",
+      "def": "Efficiency"
+    }
+  ]
+}

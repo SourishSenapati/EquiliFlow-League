@@ -1,0 +1,16 @@
+{
+  "id": "D1_L2",
+  "title": "Centrifugal Pump Metrics",
+  "formula": "NPSHa = (Patm - Pv)/\u03c1g + hs - hf",
+  "theory": "Predicting cavitation by monitoring Net Positive Suction Head Available. Maintaining static head (hs) to prevent impeller erosion.",
+  "variables": [
+    {
+      "sym": "Pv",
+      "def": "Vapor Pressure"
+    },
+    {
+      "sym": "hf",
+      "def": "Friction Head Loss"
+    }
+  ]
+}

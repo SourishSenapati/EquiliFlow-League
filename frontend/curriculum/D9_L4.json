@@ -1,0 +1,16 @@
+{
+  "id": "D9_L4",
+  "title": "Stress Crack K1c Predictive",
+  "formula": "K1c = Y * \u03c3 * (\u03c0a)^0.5",
+  "theory": "Ensuring high-pressure vessel integrity. Modeling fracture mechanics (K1c) to prevent catastrophic wall failure.",
+  "variables": [
+    {
+      "sym": "\u03c3",
+      "def": "Applied Stress"
+    },
+    {
+      "sym": "a",
+      "def": "Crack Depth"
+    }
+  ]
+}

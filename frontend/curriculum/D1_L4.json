@@ -1,0 +1,16 @@
+{
+  "id": "D1_L4",
+  "title": "Site Hydraulic Gradient",
+  "formula": "min \u03a3(dP * Q)",
+  "theory": "Principal GET Challenge: Balancing massive parallel pump stations to meet site demand while minimizing parasitic energy consumption.",
+  "variables": [
+    {
+      "sym": "dP",
+      "def": "Diff. Pressure"
+    },
+    {
+      "sym": "Q",
+      "def": "Flow Rate"
+    }
+  ]
+}

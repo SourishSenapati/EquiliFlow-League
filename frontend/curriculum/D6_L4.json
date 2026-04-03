@@ -1,0 +1,16 @@
+{
+  "id": "D6_L4",
+  "title": "Principal QRA Strategy",
+  "formula": "IR = \u03a3(Freq * Cons)",
+  "theory": "Site Lead Challenge: Mapping Individual Risk (IR) fatality contours to optimize site layout for personnel safety.",
+  "variables": [
+    {
+      "sym": "IR",
+      "def": "Fatality Risk"
+    },
+    {
+      "sym": "Freq",
+      "def": "Event Freq"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "D2_L1",
+  "title": "First Law: Open Control Volume",
+  "formula": "Q - W = \u0394(H + Ek + Ep)",
+  "theory": "Energy balance for steady-state flow systems. Tracking enthalpy departures across heaters and adiabatic compressor stages.",
+  "variables": [
+    {
+      "sym": "H",
+      "def": "Enthalpy"
+    },
+    {
+      "sym": "Q",
+      "def": "Heat Flux"
+    }
+  ]
+}

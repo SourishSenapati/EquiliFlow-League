@@ -1,0 +1,16 @@
+{
+  "id": "D4_L1",
+  "title": "Molecular Fickian Flux",
+  "formula": "J_A = -D_AB * dc/dz",
+  "theory": "First principles of diffusive transport. Calculating mass gradients for gas-leak sensing in site containment.",
+  "variables": [
+    {
+      "sym": "J_A",
+      "def": "Mass Flux"
+    },
+    {
+      "sym": "D_AB",
+      "def": "Diffusivity"
+    }
+  ]
+}

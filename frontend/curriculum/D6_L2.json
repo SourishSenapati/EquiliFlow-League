@@ -1,0 +1,16 @@
+{
+  "id": "D6_L2",
+  "title": "PSV Fire-Case Sizing",
+  "formula": "A = W / (C*Kd*P)",
+  "theory": "Determining critical pressure relief valve (PSV) orifice area to prevent vessel BLEVE during site fires.",
+  "variables": [
+    {
+      "sym": "W",
+      "def": "Relief Flow"
+    },
+    {
+      "sym": "Kd",
+      "def": "Discharge Coeff"
+    }
+  ]
+}
