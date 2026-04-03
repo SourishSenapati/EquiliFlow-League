@@ -10,9 +10,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="curriculum.js"></script>
 </head>
 <body>
+
+    <!-- AUTH OVERLAY -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card liquid-glass">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <svg width="40" height="40" viewBox="0 0 30 30" fill="none">
+                        <circle cx="15" cy="15" r="14" stroke="#a78bfa" stroke-width="2"/>
+                        <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="#a78bfa" opacity="0.6"/>
+                    </svg>
+                </div>
+                <h1>EquiliFlow League</h1>
+                <p>Industrial Digital Twin & Career Forge</p>
+            </div>
+            <div class="auth-actions">
+                <button class="auth-btn google" onclick="app.login('google')">
+                    <img src="https://img.icons8.com/color/48/google-logo.png" alt="G">
+                    <span>Initiate with Google</span>
+                </button>
+                <button class="auth-btn linkedin" onclick="app.login('linkedin')">
+                    <img src="https://img.icons8.com/color/48/linkedin.png" alt="L">
+                    <span>Deploy with LinkedIn</span>
+                </button>
+            </div>
+            <div class="auth-footer">
+                GET-Standard 4-Sigma Compliance Secured
+            </div>
+        </div>
+    </div>
 
     <!-- Animated Background Canvas -->
     <div class="bg-canvas" aria-hidden="true">
@@ -22,104 +50,62 @@
         <div class="orb orb-4"></div>
     </div>
 
-    <!-- Floating Navigation Bar -->
-    <nav class="liquid-nav" id="main-header">
-        <div class="nav-logo">
-            <div class="logo-mark">
-                <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                    <circle cx="15" cy="15" r="14" stroke="url(#svgGrad1)" stroke-width="1.5"/>
-                    <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="url(#svgGrad2)" opacity="0.9"/>
-                    <circle cx="15" cy="15" r="3.5" fill="white" opacity="0.85"/>
-                    <defs>
-                        <linearGradient id="svgGrad1" x1="0" y1="0" x2="30" x2="30" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#a78bfa"/><stop offset="1" stop-color="#38bdf8"/>
-                        </linearGradient>
-                        <linearGradient id="svgGrad2" x1="8" y1="8" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#c4b5fd"/><stop offset="1" stop-color="#7dd3fc"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
-            <div class="logo-wordmark">
-                <span class="logo-primary">EquiliFlow</span>
-                <span class="logo-tag">League · Digital Twin</span>
-            </div>
-        </div>
-
-        <div class="nav-status-cluster">
-            <div class="status-chip" id="telemetry-status">
-                <span class="status-pulse" id="status-pulse"></span>
-                <span class="status-label" id="status-label">Connecting…</span>
-            </div>
-            <div class="stat-pill" title="Academic Year">
-                <i data-lucide="graduation-cap" class="stat-icon"></i>
-                <span class="stat-value">Year&nbsp;<strong id="current-year">1</strong></span>
-            </div>
-            <div class="stat-pill" title="Capital">
-                <i data-lucide="trending-up" class="stat-icon"></i>
-                <span class="stat-value"><strong id="capital-display">$1,000.00</strong></span>
-            </div>
-            <div class="stat-pill ws-badge" title="WebSocket Stream">
-                <i data-lucide="radio" class="stat-icon"></i>
-                <span class="stat-value" id="ws-hz">–– Hz</span>
-            </div>
-        </div>
-
-        <div class="nav-actions">
-            <div class="reset-system-wrap" id="reset-btn" title="Reset Simulation">
-                <i data-lucide="rotate-ccw"></i>
-            </div>
-            <button class="liquid-btn" id="examine-btn">
-                <i data-lucide="send"></i>
-                Submit Insight
-            </button>
-        </div>
-    </nav>
-
-    <!-- MAIN APP SHELL -->
-    <div class="app-shell">
+    <div class="app-container" id="main-app" style="display:none;">
         
+        <!-- SIDEBAR -->
         <aside class="sidebar liquid-glass">
-            
-            <!-- User Profile Card -->
-            <div class="user-profile" id="user-card">
-                <div class="user-avatar-wrap">
-                    <div class="user-avatar">SS</div>
-                    <div class="user-pro-badge" id="pro-badge">FREE</div>
-                </div>
-                <div class="user-info">
-                    <div class="user-name">Sourish Senapati</div>
-                    <div class="user-role" id="user-role">Student (Year 1)</div>
-                </div>
-                <div class="user-stats">
-                    <div class="user-stat-row">
-                        <span class="stat-label">CHELL Credits</span>
-                        <span class="stat-count" id="chell-credits">5 / 5</span>
-                    </div>
-                    <div class="stat-progress-bar">
-                        <div class="stat-progress-fill" id="chell-fill"></div>
+            <div class="sidebar-header">
+                <div class="nav-logo">
+                    <div class="logo-mark">
+                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none">
+                            <circle cx="15" cy="15" r="14" stroke="#a78bfa" stroke-width="1.5"/>
+                            <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="#a78bfa" opacity="0.9"/>
+                        </svg>
                     </div>
                 </div>
             </div>
 
-            <div class="sidebar-divider"></div>
+            <!-- PROFILE CARD -->
+            <div class="user-profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar-wrap">
+                        <div class="profile-avatar" id="user-avatar-initials">GS</div>
+                        <div class="pro-tag" id="pro-badge" style="display:none;">PRO</div>
+                    </div>
+                    <div class="profile-main">
+                        <h3 class="user-name">Guest Engineer</h3>
+                        <p class="user-rank" id="user-role">Cadet GET</p>
+                    </div>
+                </div>
+                
+                <div class="credit-wrap">
+                    <div class="credit-info">
+                        <span class="credit-label">CHELL CREDITS</span>
+                        <span class="credit-count" id="chell-credits">5 / 5</span>
+                    </div>
+                    <div class="credit-bar">
+                        <div class="credit-fill" id="chell-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <button class="upgrade-btn" onclick="app.openUpgradeModal()">
+                    <i data-lucide="zap"></i> UNLOCK CHELL PRO
+                </button>
+            </div>
 
             <div class="sidebar-title">
                 <i data-lucide="book-open"></i>
-                <span>Curriculum</span>
+                <span>CURRICULUM</span>
             </div>
             <ul class="domain-nav" id="domain-list">
-                <li class="domain-item loading">
-                    <div class="domain-skeleton"></div>
-                    <div class="domain-skeleton short"></div>
-                </li>
+                <!-- Injected by JS -->
             </ul>
 
             <div class="sidebar-divider"></div>
 
             <div class="sidebar-title">
                 <i data-lucide="blocks"></i>
-                <span>Digital Nexus</span>
+                <span>DIGITAL NEXUS</span>
             </div>
             <ul class="tool-nav">
                 <li class="tool-item" id="btn-portfolio">
@@ -140,23 +126,28 @@
 
         <main class="content-area">
             
-            <!-- PHASE TABS -->
-            <div class="phase-tabs liquid-glass">
-                <div class="tab-track" id="phase-selector">
-                    <button class="phase-btn active" data-phase="1" onclick="app.setPhase(1)">
-                        <i data-lucide="droplets"></i><span>Fluid Dynamics</span>
-                    </button>
-                    <button class="phase-btn" data-phase="2" onclick="app.setPhase(2)">
-                        <i data-lucide="flame"></i><span>Thermal Stability</span>
-                    </button>
-                    <button class="phase-btn" data-phase="3" onclick="app.setPhase(3)">
-                        <i data-lucide="atom"></i><span>Reaction Yield</span>
-                    </button>
-                    <button class="phase-btn" data-phase="4" onclick="app.setPhase(4)">
-                        <i data-lucide="brain-circuit"></i><span>AI Optimization</span>
-                    </button>
+            <!-- TOP NAV -->
+            <nav class="liquid-nav" id="main-header">
+                <div class="nav-status-cluster">
+                    <div class="status-chip" id="telemetry-status">
+                        <span class="status-pulse" id="status-pulse"></span>
+                        <span class="status-label" id="status-label">Connecting…</span>
+                    </div>
+                    <div class="stat-pill">
+                        <i data-lucide="graduation-cap" class="stat-icon"></i>
+                        <span class="stat-value">Year&nbsp;<strong id="current-year">1</strong></span>
+                    </div>
+                    <div class="stat-pill">
+                        <i data-lucide="trending-up" class="stat-icon"></i>
+                        <span class="stat-value"><strong id="capital-display">$1,000.00</strong></span>
+                    </div>
                 </div>
-            </div>
+                <div class="nav-actions">
+                    <div class="reset-system-wrap" id="reset-btn" title="Emergency Reset">
+                        <i data-lucide="refresh-ccw" class="reset-icon"></i>
+                    </div>
+                </div>
+            </nav>
 
             <!-- DASHBOARD GRID -->
             <div class="main-split">
@@ -175,19 +166,19 @@
                             <i data-lucide="gamepad-2" class="pane-header-icon"></i>
                             <span class="pane-header-title">MOLECULAR FACTORY</span>
                         </div>
-                        <div class="stat-tag">SUB-ATOM PRECISION</div>
+                        <div class="stat-tag" id="game-tier-label">CADET SIMULATION</div>
                     </div>
                     <div class="game-container">
                         <canvas id="game-canvas" class="game-canvas"></canvas>
                         <div class="game-overlay">
                             <div class="game-controls">
-                                <button class="game-btn" id="spawn-mol" title="Inject Molecules">
+                                <button class="game-btn" id="spawn-mol">
                                     <i data-lucide="plus"></i>
                                 </button>
-                                <button class="game-btn" id="heat-box" title="Thermal Chaos">
+                                <button class="game-btn" id="heat-box">
                                     <i data-lucide="flame"></i>
                                 </button>
-                                <button class="game-btn" id="cool-box" title="Cryo Stabilization">
+                                <button class="game-btn" id="cool-box">
                                     <i data-lucide="snowflake"></i>
                                 </button>
                             </div>
@@ -247,21 +238,18 @@
         </main>
     </div>
 
-    <!-- TOAST NOTIFICATIONS -->
-    <div class="toast-stack" id="notif-area"></div>
-
-    <!-- MODAL SYSTEM -->
-    <div class="modal-overlay" id="tool-modal">
-        <div class="modal-content">
+    <!-- MODALS -->
+    <div id="tool-modal" class="modal-overlay">
+        <div class="modal-content liquid-glass">
             <div class="modal-header">
-                <h2 class="modal-title" id="modal-title">Tool Name</h2>
-                <button class="close-btn" id="modal-close" onclick="app.closeModal()" title="Close Tool Modal">
-                    <i data-lucide="x"></i>
-                </button>
+                <h2 id="modal-title">System Alert</h2>
+                <button class="close-modal" onclick="app.closeModal()">&times;</button>
             </div>
-            <div id="modal-body"></div>
+            <div id="modal-body" class="modal-body"></div>
         </div>
     </div>
+
+    <div id="notif-area" class="notif-area"></div>
 
     <script src="script.js"></script>
 </body>

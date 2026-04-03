@@ -1,0 +1,16 @@
+{
+  "id": "thermo_L4",
+  "title": "Peng-Robinson EOS Convergence",
+  "formula": "Z\u00b3 - (1-B)Z\u00b2 + (A-2B-3B\u00b2)Z...",
+  "theory": "Solving for compressibility (Z) in high-pressure reactor modeling. Accurate prediction of real-gas molar volumes.",
+  "variables": [
+    {
+      "sym": "Z",
+      "def": "Compressibility"
+    },
+    {
+      "sym": "T_c",
+      "def": "Critical Temp"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "reaction_L1",
+  "title": "Ideal CSTR Space Time",
+  "formula": "\u03c4 = V / v_0 = X / (-r_A)",
+  "theory": "Sizing steady-state reactors based on residence time (\u03c4). Determining conversion limits for first-order kinetics.",
+  "variables": [
+    {
+      "sym": "\u03c4",
+      "def": "Space Time (s)"
+    },
+    {
+      "sym": "X",
+      "def": "Fractional Conversion"
+    }
+  ]
+}

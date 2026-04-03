@@ -1,0 +1,16 @@
+{
+  "id": "fluids_L3",
+  "title": "Power-Law Rheology",
+  "formula": "\u03c4 = K(dv/dy)^n",
+  "theory": "Modeling non-Newtonian flow in complex polymers. Determining the consistency index (K) for high-viscosity industrial extrusions.",
+  "variables": [
+    {
+      "sym": "K",
+      "def": "Consistency Index"
+    },
+    {
+      "sym": "n",
+      "def": "Flow Behavior Index"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "reaction_L3",
+  "title": "Catalyst Activity Decay",
+  "formula": "-da/dt = kd * a^p",
+  "theory": "Modeling deactivation due to site poison carryover (Sulphur/Coke). Predicting Remaining Useful Life (RUL).",
+  "variables": [
+    {
+      "sym": "a",
+      "def": "Activity Phase"
+    },
+    {
+      "sym": "kd",
+      "def": "Decay Constant"
+    }
+  ]
+}

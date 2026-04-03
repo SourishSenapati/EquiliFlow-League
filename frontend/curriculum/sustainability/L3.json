@@ -1,0 +1,16 @@
+{
+  "id": "sustainability_L3",
+  "title": "Post-Combustion Carbon Prep",
+  "formula": "X_co2 = F(Flux, Abs)",
+  "theory": "Modeling amine-based carbon scrubbing. Balancing solvent circulation against flue gas CO2 concentrations.",
+  "variables": [
+    {
+      "sym": "Abs",
+      "def": "Absorption %"
+    },
+    {
+      "sym": "S",
+      "def": "Solvent Duty"
+    }
+  ]
+}

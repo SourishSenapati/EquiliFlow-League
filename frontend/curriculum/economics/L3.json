@@ -1,0 +1,16 @@
+{
+  "id": "economics_L3",
+  "title": "Strategic NPV/IRR Forecasting",
+  "formula": "NPV = \u03a3 CF_t/(1+r)^t - Cost",
+  "theory": "Principal Strategy: Evaluating a 10-year decarbonization project. Analyzing internal rate of return (IRR).",
+  "variables": [
+    {
+      "sym": "NPV",
+      "def": "Net Present Val"
+    },
+    {
+      "sym": "r",
+      "def": "Discount Rate"
+    }
+  ]
+}

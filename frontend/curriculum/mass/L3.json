@@ -1,0 +1,16 @@
+{
+  "id": "mass_L3",
+  "title": "FUG Column Design Methods",
+  "formula": "N_min = ln(\u03b1) / ...",
+  "theory": "Multi-component column modeling. Predicting minimum stages (N_min) for complex site separation loops.",
+  "variables": [
+    {
+      "sym": "\u03b1",
+      "def": "Rel. Volatility"
+    },
+    {
+      "sym": "N",
+      "def": "Stage Count"
+    }
+  ]
+}

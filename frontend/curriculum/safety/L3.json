@@ -1,0 +1,16 @@
+{
+  "id": "safety_L3",
+  "title": "SIL Layer Verification",
+  "formula": "PFD_avg = 1/2 * \u03bb * TI",
+  "theory": "Verifying Safety Instrumented Systems (SIS). Maintaining SIL-2 certification for reactor high-pressure trips.",
+  "variables": [
+    {
+      "sym": "PFD",
+      "def": "Prob. of Failure"
+    },
+    {
+      "sym": "\u03bb",
+      "def": "Hazard Rate"
+    }
+  ]
+}

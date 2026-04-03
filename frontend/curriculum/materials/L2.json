@@ -1,0 +1,16 @@
+{
+  "id": "materials_L2",
+  "title": "Acidic Corrosion MPY Penetration",
+  "formula": "mpy = (534*W)/(DAT)",
+  "theory": "Site Integrity: Monitoring wall thinning in high-acid pipelines. Predicting equipment replacement windows.",
+  "variables": [
+    {
+      "sym": "mpy",
+      "def": "Mils Per Year"
+    },
+    {
+      "sym": "W",
+      "def": "Mass Loss"
+    }
+  ]
+}

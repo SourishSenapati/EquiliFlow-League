@@ -1,0 +1,16 @@
+{
+  "id": "sustainability_L1",
+  "title": "Cradle-to-Gate LCA Scope",
+  "formula": "E = \u03a3(m * EF)",
+  "theory": "Life Cycle Assessment (LCA) first principles. Calculating Scope 1 and 2 emissions for site-wide feedstocks.",
+  "variables": [
+    {
+      "sym": "m",
+      "def": "Mass Input"
+    },
+    {
+      "sym": "EF",
+      "def": "Emission Coeff"
+    }
+  ]
+}

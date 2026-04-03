@@ -1,0 +1,16 @@
+{
+  "id": "economics_L4",
+  "title": "Global Site Value Creation",
+  "formula": "Profit = Revenue - (OpEx + Tax)",
+  "theory": "Managing the site as a business. Balancing global market feedstock trends against carbon tax liabilities.",
+  "variables": [
+    {
+      "sym": "V",
+      "def": "Equity Value"
+    },
+    {
+      "sym": "Tax",
+      "def": "Env Penalty"
+    }
+  ]
+}

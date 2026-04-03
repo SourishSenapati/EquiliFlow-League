@@ -14,6 +14,7 @@ class MolecularEngine {
         this.particles = [];
         this.temp = 1.0;
         this.entropy = 0;
+        this.tier = 0; // Cadet
         this.bounds = { w: 0, h: 0 };
         this.raf = null;
 
@@ -41,10 +42,21 @@ class MolecularEngine {
             oldX: (x || Math.random() * this.bounds.w) - (Math.random() - 0.5) * 5,
             oldY: (y || Math.random() * this.bounds.h) - (Math.random() - 0.5) * 5,
             r: 4 + Math.random() * 6,
-            color: Math.random() > 0.5 ? '#8b5cf6' : '#06b6d4',
+            color: this._getTierColor(),
             mass: 1.0
         };
         this.particles.push(p);
+    }
+
+    _getTierColor() {
+        const colors = [
+            ['#8b5cf6', '#06b6d4'], // Cadet: Purple/Cyan
+            ['#10b981', '#3b82f6'], // Operator: Green/Blue
+            ['#f59e0b', '#ef4444'], // Senior: Amber/Red
+            ['#ffffff', '#8b5cf6']  // Principal: White/Neon
+        ];
+        const pair = colors[this.tier] || colors[0];
+        return Math.random() > 0.5 ? pair[0] : pair[1];
     }
 
     heat() { this.temp = Math.min(this.temp + 0.5, 10.0); }
@@ -127,11 +139,16 @@ class MolecularEngine {
 
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#fff';
-            this.ctx.shadowBlur = 15;
-            this.ctx.shadowColor = p.color;
+            
+            // Tier-based glow
+            if (this.tier >= 2) {
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowColor = p.color;
+            }
+
+            this.ctx.fillStyle = p.color;
             this.ctx.fill();
-            this.ctx.shadowBlur = 0;
+            this.ctx.shadowBlur = 0; 
         }
 
         // Update UI counters
@@ -584,10 +601,13 @@ class EquiliFlowApp {
                 flow_rate: 0, temp_k: 0, conversion: 0, pressure_bar: 0, 
                 pump_power: 0, ai_loss: 0, entropy: 0, kinetic_e: 0
             },
-            assets: {},
-            curriculum: null, 
-            activeModule: null 
-        };
+             assets: {},
+             curriculum: null, 
+             activeModule: null,
+             isAuthenticated: false,
+             user: null,
+             xpTarget: 1000 // Primary XP threshold (exponential scaling)
+         };
 
         this.el = {
             yearDisplay:    document.getElementById('current-year'),
@@ -596,6 +616,7 @@ class EquiliFlowApp {
             chellFill:      document.getElementById('chell-fill'),
             proBadge:       document.getElementById('pro-badge'),
             userName:       document.querySelector('.user-name'),
+            userInitials:   document.getElementById('user-avatar-initials'),
             userRole:       document.getElementById('user-role'),
             statusChip:     document.getElementById('telemetry-status'),
             statusLabel:    document.getElementById('status-label'),
@@ -612,11 +633,15 @@ class EquiliFlowApp {
             flowChip:       document.getElementById('flow-chip'),
             tempChip:       document.getElementById('temp-chip'),
             convChip:       document.getElementById('conv-chip'),
+            gameTierLabel:  document.getElementById('game-tier-label'),
         };
 
         // Reactor & Physics canvases
         this.reactor = new ReactorCanvas(document.getElementById('reactor-canvas'));
         this.molecules = new MolecularEngine(document.getElementById('game-canvas'));
+
+        // Auth
+        this._checkAuth();
 
         // WebSocket
         this._wsFrameCount = 0;
@@ -641,7 +666,79 @@ class EquiliFlowApp {
         return d ? JSON.parse(d) : null;
     }
 
+    _checkAuth() {
+        if (!this.state.isAuthenticated) {
+            document.getElementById('auth-overlay').style.display = 'grid';
+            document.getElementById('main-app').style.display = 'none';
+        } else {
+            this._showApp();
+        }
+    }
+
+    login(provider) {
+        // Industry Standard Simulation of Google/LinkedIn Auth
+        this.state.isAuthenticated = true; 
+        const mockName = provider === 'google' ? "Professional Engineer" : "Site Architect";
+        this.state.user = {
+            name: mockName, 
+            provider: provider,
+            avatar: mockName.split(' ').map(n=>n[0]).join('')
+        };
+        this.notify(`EquiliFlow Unified Auth: ${provider.toUpperCase()} Deployment Sequence Initialized`, 'success');
+        
+        setTimeout(() => {
+            this._showApp();
+            this._saveLocalState();
+        }, 1200);
+    }
+
+    openUpgradeModal() {
+        this.openModal('CHELL PRO — PAYMENT GATEWAY', `
+            <div class="payment-terminal liquid-glass">
+                <div class="terminal-header">
+                    <i data-lucide="shield-check" class="terminal-icon"></i>
+                    <span>SECURE TRANSACTION — V1.0.4</span>
+                </div>
+                <div class="terminal-display">
+                    <div class="terminal-row"><span>PRODUCT:</span> <span>CHELL PRO PASS</span></div>
+                    <div class="terminal-row"><span>PRICE:</span> <span>$29.99 / ANNUM</span></div>
+                    <div class="terminal-row"><span>LIMIT:</span> <span>UNLIMITED ASSETS</span></div>
+                </div>
+                <div class="terminal-input">
+                    <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" class="liquid-input">
+                    <div style="display:flex; gap:12px;">
+                        <input type="text" placeholder="MM/YY" class="liquid-input" style="width:80px;">
+                        <input type="text" placeholder="CVV" class="liquid-input" style="width:60px;">
+                    </div>
+                </div>
+                <button class="auth-btn" style="width:100%;" onclick="app.processPayment()">
+                    AUTHORIZE DEPLOYMENT
+                </button>
+            </div>
+        `);
+        lucide.createIcons();
+    }
+
+    processPayment() {
+        this.notify("Authorization Successful: CHELL PRO Assets Unlocked.", "success");
+        this.state.isPro = true;
+        this.state.chellCredits = "∞";
+        this.closeModal();
+        this._updateProfileUI();
+        this._saveLocalState();
+    }
+
+    _showApp() {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('main-app').style.display = 'flex';
+        this._updateProfileUI();
+        this._initCurriculum();
+    }
+
     _updateProfileUI() {
+        if (this.el.userName && this.state.user) this.el.userName.textContent = this.state.user.name;
+        if (this.el.userInitials && this.state.user) this.el.userInitials.textContent = this.state.user.avatar;
+        
         if (this.el.chellCredits) {
             const count = this.state.chellCredits === '∞' ? '∞' : this.state.chellCredits;
             this.el.chellCredits.textContent = `${count} / 5`;
@@ -781,14 +878,24 @@ class EquiliFlowApp {
 
     async _initCurriculum() {
         try {
+            // Initial Data Fetch
+            const dbRes = await fetch('/api/v1/db/state');
+            const dbData = await dbRes.json();
+            
+            // Sync with persistent backend
+            this.state.assets = dbData.assets;
+            this.state.chellCredits = dbData.user.credits || 5;
+            this.state.isPro = dbData.user.is_pro || false;
+            
             const res = await fetch('/curriculum/manifest.json');
             this.state.curriculum = await res.json();
             await this._loadActiveModule();
             this._renderCurriculumList();
             this._renderActiveModule();
+            this._renderAssets(); // Initial table render
         } catch (e) {
-            console.error("Critical: Curriculum DB Sync Failure", e);
-            this.notify("System Offline: Curriculum Sync Error", "error");
+            console.error("Critical: CHELL Sync Failure", e);
+            this.notify("System Offline: Site Data Correlation Error", "error");
         }
     }
 
@@ -823,6 +930,11 @@ class EquiliFlowApp {
         const mod = this.state.activeModule;
         const panel = this.el.theoryGrid;
         if (!panel || !mod) return;
+
+        // Update Game Tier Graphics
+        this.molecules.tier = this.state.currentTierIdx;
+        const tierNames = ["CADET SIMULATION", "SYSTEMS OPERATOR", "PROCESS SENIOR", "PRINCIPAL DIGITAL TWIN"];
+        if (this.el.gameTierLabel) this.el.gameTierLabel.textContent = tierNames[this.state.currentTierIdx];
 
         panel.innerHTML = `
             <div class="theory-header">
@@ -875,6 +987,13 @@ class EquiliFlowApp {
         const tierCount = 4;
 
         this.state.xp += 100;
+
+        // Exponential XP Target Scaling
+        if (this.state.xp >= this.state.xpTarget) {
+            this.state.xp = 0;
+            this.state.xpTarget = Math.floor(this.state.xpTarget * 1.5); // 50% resistance increase
+            this.notify(`Career Milestone: XP Capacity Expanded to ${this.state.xpTarget}`, 'warning');
+        }
 
         if (this.state.currentTierIdx < tierCount - 1) {
             this.state.currentTierIdx++;

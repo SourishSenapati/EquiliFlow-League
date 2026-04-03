@@ -1,0 +1,16 @@
+{
+  "id": "mass_L2",
+  "title": "McCabe-Thiele Reflux Opt",
+  "formula": "y = L/V * x + (D/V * xD)",
+  "theory": "Monitoring tray efficiency and reflux ratios. Ensuring product purity in high-energy naphtha splitters.",
+  "variables": [
+    {
+      "sym": "L/V",
+      "def": "Reflux Ratio"
+    },
+    {
+      "sym": "xD",
+      "def": "Purity"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "sustainability_L4",
+  "title": "Advanced Circular Loops",
+  "formula": "min Waste s.t. Recycling",
+  "theory": "GET Principal Challenge: Zero-waste industrial site. Designing circular byproduct loops for high-value recapture.",
+  "variables": [
+    {
+      "sym": "NZ",
+      "def": "Net Zero Stat"
+    },
+    {
+      "sym": "Cir",
+      "def": "Circularity Index"
+    }
+  ]
+}

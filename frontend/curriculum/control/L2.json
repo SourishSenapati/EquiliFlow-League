@@ -1,0 +1,16 @@
+{
+  "id": "control_L2",
+  "title": "Transmitter Nulling/Zeroing",
+  "formula": "Error = |Measured - Target|",
+  "theory": "Field Engineering: Calibrating 4-20mA pressure sensors. Correcting for signal drift in remote site headers.",
+  "variables": [
+    {
+      "sym": "mA",
+      "def": "Loop Signal"
+    },
+    {
+      "sym": "PV",
+      "def": "Process Variable"
+    }
+  ]
+}

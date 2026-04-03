@@ -1,0 +1,16 @@
+{
+  "id": "control_L4",
+  "title": "MPC Digital Twin State",
+  "formula": "min J = \u03a3(y-yr)\u00b2 + (du)\u00b2",
+  "theory": "Model Predictive Control: Forecasting site trajectories. Using AI-driven Twins to maintain tight profit margins.",
+  "variables": [
+    {
+      "sym": "J",
+      "def": "Objective Func"
+    },
+    {
+      "sym": "u",
+      "def": "Manipulated Var"
+    }
+  ]
+}

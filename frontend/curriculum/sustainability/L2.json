@@ -1,0 +1,16 @@
+{
+  "id": "sustainability_L2",
+  "title": "Secondary Water Remediation",
+  "formula": "\u03b7_rem = (Cin - Cout) / Cin",
+  "theory": "Optimizing water treatment efficiency (BOD/COD) to ensure ZERO discharge impact on local ecosystems.",
+  "variables": [
+    {
+      "sym": "\u03b7",
+      "def": "Remed. Efficiency"
+    },
+    {
+      "sym": "C",
+      "def": "Pollutant Conc"
+    }
+  ]
+}

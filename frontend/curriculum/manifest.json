@@ -1,103 +1,103 @@
 {
   "domains": [
     {
-      "id": "D1",
+      "id": "fluids",
       "title": "Fluid Dynamics & Momentum",
       "files": [
-        "D1_L1.json",
-        "D1_L2.json",
-        "D1_L3.json",
-        "D1_L4.json"
+        "fluids/L1.json",
+        "fluids/L2.json",
+        "fluids/L3.json",
+        "fluids/L4.json"
       ]
     },
     {
-      "id": "D2",
+      "id": "thermo",
       "title": "Chemical Thermodynamics",
       "files": [
-        "D2_L1.json",
-        "D2_L2.json",
-        "D2_L3.json",
-        "D2_L4.json"
+        "thermo/L1.json",
+        "thermo/L2.json",
+        "thermo/L3.json",
+        "thermo/L4.json"
       ]
     },
     {
-      "id": "D3",
+      "id": "reaction",
       "title": "Reaction & Kinetics Ops",
       "files": [
-        "D3_L1.json",
-        "D3_L2.json",
-        "D3_L3.json",
-        "D3_L4.json"
+        "reaction/L1.json",
+        "reaction/L2.json",
+        "reaction/L3.json",
+        "reaction/L4.json"
       ]
     },
     {
-      "id": "D4",
+      "id": "mass",
       "title": "Mass Transfer & Separation",
       "files": [
-        "D4_L1.json",
-        "D4_L2.json",
-        "D4_L3.json",
-        "D4_L4.json"
+        "mass/L1.json",
+        "mass/L2.json",
+        "mass/L3.json",
+        "mass/L4.json"
       ]
     },
     {
-      "id": "D5",
+      "id": "control",
       "title": "Process Control & PID",
       "files": [
-        "D5_L1.json",
-        "D5_L2.json",
-        "D5_L3.json",
-        "D5_L4.json"
+        "control/L1.json",
+        "control/L2.json",
+        "control/L3.json",
+        "control/L4.json"
       ]
     },
     {
-      "id": "D6",
+      "id": "safety",
       "title": "Safety & LOPA Analysis",
       "files": [
-        "D6_L1.json",
-        "D6_L2.json",
-        "D6_L3.json",
-        "D6_L4.json"
+        "safety/L1.json",
+        "safety/L2.json",
+        "safety/L3.json",
+        "safety/L4.json"
       ]
     },
     {
-      "id": "D7",
+      "id": "economics",
       "title": "Project Economics & NPV",
       "files": [
-        "D7_L1.json",
-        "D7_L2.json",
-        "D7_L3.json",
-        "D7_L4.json"
+        "economics/L1.json",
+        "economics/L2.json",
+        "economics/L3.json",
+        "economics/L4.json"
       ]
     },
     {
-      "id": "D8",
+      "id": "sustainability",
       "title": "Net-Zero Sustainability",
       "files": [
-        "D8_L1.json",
-        "D8_L2.json",
-        "D8_L3.json",
-        "D8_L4.json"
+        "sustainability/L1.json",
+        "sustainability/L2.json",
+        "sustainability/L3.json",
+        "sustainability/L4.json"
       ]
     },
     {
-      "id": "D9",
+      "id": "materials",
       "title": "Materials & Chemistry",
       "files": [
-        "D9_L1.json",
-        "D9_L2.json",
-        "D9_L3.json",
-        "D9_L4.json"
+        "materials/L1.json",
+        "materials/L2.json",
+        "materials/L3.json",
+        "materials/L4.json"
       ]
     },
     {
-      "id": "D10",
+      "id": "utilities",
       "title": "Site Utility Networks",
       "files": [
-        "D10_L1.json",
-        "D10_L2.json",
-        "D10_L3.json",
-        "D10_L4.json"
+        "utilities/L1.json",
+        "utilities/L2.json",
+        "utilities/L3.json",
+        "utilities/L4.json"
       ]
     }
   ]
