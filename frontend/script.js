@@ -595,18 +595,18 @@ class EquiliFlowApp {
             capital: 154200,
             chellCredits: 5,
             isPro: false,
-            xp: 0,
-            role: 'Academic Explorer',
-            physics: {
-                flow_rate: 0, temp_k: 0, conversion: 0, pressure_bar: 0, 
-                pump_power: 0, ai_loss: 0, entropy: 0, kinetic_e: 0
-            },
-             assets: {},
+             xp: 0,
+             role: 'Graduate Engineering Trainee',
+             physics: {
+                 flow_rate: 0, temp_k: 0, conversion: 0, pressure_bar: 0, 
+                 pump_power: 0, ai_loss: 0, entropy: 0, kinetic_e: 0
+             },
+             assets: [],
              curriculum: null, 
              activeModule: null,
              isAuthenticated: false,
              user: null,
-             xpTarget: 1000 // Primary XP threshold (exponential scaling)
+             xpTarget: 1000 
          };
 
         this.el = {
@@ -883,16 +883,18 @@ class EquiliFlowApp {
             const dbData = await dbRes.json();
             
             // Sync with persistent backend
-            this.state.assets = dbData.assets;
-            this.state.chellCredits = dbData.user.credits || 5;
-            this.state.isPro = dbData.user.is_pro || false;
+            this.state.assets = dbData.assets || [];
+            this.state.chellCredits = dbData.user?.credits !== undefined ? dbData.user.credits : 5;
+            this.state.isPro = dbData.user?.is_pro || false;
             
             const res = await fetch('/curriculum/manifest.json');
             this.state.curriculum = await res.json();
+            
             await this._loadActiveModule();
             this._renderCurriculumList();
             this._renderActiveModule();
-            this._renderAssets(); // Initial table render
+            this._renderAssets(); 
+            this._updateProfileUI(); // Ensure UI re-hydrated after fetch
         } catch (e) {
             console.error("Critical: CHELL Sync Failure", e);
             this.notify("System Offline: Site Data Correlation Error", "error");
@@ -902,16 +904,22 @@ class EquiliFlowApp {
     async _loadActiveModule() {
         if (!this.state.curriculum) return;
         const dom = this.state.curriculum.domains[this.state.currentDomainIdx];
+        if (!dom) return;
         const file = dom.files[this.state.currentTierIdx];
+        if (!file) return;
         const res = await fetch(`/curriculum/${file}`);
         this.state.activeModule = await res.json();
     }
 
     _renderCurriculumList() {
         if (!this.el.domainList || !this.state.curriculum) return;
-        this.el.domainList.innerHTML = this.state.curriculum.domains.map((dom, i) => `
-            <li class="domain-item ${i === this.state.currentDomainIdx ? 'active' : ''}" onclick="app.selectDomain(${i})">
-                <span class="domain-num">${(i + 1).toString().padStart(2, '0')}</span>
+        const list = this.state.curriculum.domains;
+        if (!list) return;
+
+        this.el.domainList.innerHTML = list.map((dom, i) => `
+            <li class="domain-item ${i === this.state.currentDomainIdx ? 'active' : ''}" 
+                onclick="window.app.selectDomain(${i})">
+                <span class="domain-num">${(i+1).toString().padStart(2, '0')}</span>
                 <span class="domain-name">${dom.title}</span>
             </li>
         `).join('');
@@ -1056,10 +1064,11 @@ class EquiliFlowApp {
 
     _renderAssets() {
         const tbody = this.el.assetTable;
-        if (!tbody) return;
+        if (!tbody || !this.state.assets) return;
         tbody.innerHTML = '';
 
-        Object.entries(this.state.assets).forEach(([id, a]) => {
+        this.state.assets.forEach(a => {
+            const id = a.id;
             const dur = a.durability ?? 100;
             const fillClass = dur < 30 ? 'danger' : dur < 60 ? 'warn' : '';
             const tr = document.createElement('tr');
