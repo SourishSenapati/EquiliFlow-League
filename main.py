@@ -61,9 +61,21 @@ current_state = SimState()
 async def get_db_state():
     return db.data
 
+@app.get("/api/v1/user/profile")
+async def get_profile():
+    return db.data["user"]
+
+@app.post("/api/v1/user/upgrade")
+async def upgrade_user():
+    db.update_user({"is_pro": True, "credits": 999999})
+    return {"status": "success", "message": "CHELL PRO Activated"}
+
 @app.post("/api/v1/simulation/checkpoint")
 async def save_checkpoint(mission_id: str):
     db.add_checkpoint(mission_id)
+    # Exponential XP award (simulated)
+    current_xp = db.data["user"].get("xp", 0)
+    db.update_user({"xp": current_xp + 100})
     return {"status": "success", "message": f"Checkpoint saved: {mission_id}"}
 
 @app.get("/api/v1/assets/registry")
