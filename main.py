@@ -19,9 +19,9 @@ class ChellDB:
         return {
             "user": {"name": "Sourish Senapati", "xp": 0, "credits": 5, "is_pro": False},
             "assets": [
-                {"id": "T-101", "type": "Reactor", "tier": 1, "durability": 100, "efficiency": 0.98},
-                {"id": "P-101", "type": "Pump", "tier": 1, "durability": 100, "efficiency": 0.85},
-                {"id": "L-101", "type": "Valve", "tier": 1, "durability": 100, "efficiency": 0.95}
+                {"id": "T-101", "type": "Reactor", "tier": 1, "durability": 100, "efficiency": 0.98, "maintenance_cost": 250},
+                {"id": "P-101", "type": "Pump", "tier": 1, "durability": 100, "efficiency": 0.85, "maintenance_cost": 120},
+                {"id": "L-101", "type": "Valve", "tier": 1, "durability": 100, "efficiency": 0.95, "maintenance_cost": 45}
             ],
             "checkpoints": []
         }
