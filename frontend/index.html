@@ -24,20 +24,45 @@
                     </svg>
                 </div>
                 <h1>EquiliFlow League</h1>
-                <p>Industrial Digital Twin & Career Forge</p>
+                <p>Industrial Simulation & Process Optimization Platform</p>
             </div>
-            <div class="auth-actions">
-                <button class="auth-btn google" onclick="app.login('google')">
-                    <img src="https://img.icons8.com/color/48/google-logo.png" alt="G">
-                    <span>Initiate with Google</span>
-                </button>
-                <button class="auth-btn linkedin" onclick="app.login('linkedin')">
-                    <img src="https://img.icons8.com/color/48/linkedin.png" alt="L">
-                    <span>Deploy with LinkedIn</span>
-                </button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-login" onclick="app.switchAuthTab('login')">LOGIN</button>
+                <button class="auth-tab-btn" id="tab-register" onclick="app.switchAuthTab('register')">REGISTER</button>
             </div>
+
+            <!-- Login Form -->
+            <form id="form-login" class="auth-form" onsubmit="app.handleAuthSubmit(event, 'login')">
+                <div class="form-group">
+                    <input type="text" id="login-username" class="liquid-input" placeholder="USERNAME" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" class="liquid-input" placeholder="PASSWORD" value="admin" required>
+                </div>
+                <button type="submit" class="auth-btn submit-btn" style="width:100%;">
+                    <span>INITIALIZE OPERATION</span>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="form-register" class="auth-form" style="display:none;" onsubmit="app.handleAuthSubmit(event, 'register')">
+                <div class="form-group">
+                    <input type="text" id="register-name" class="liquid-input" placeholder="FULL NAME" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="register-username" class="liquid-input" placeholder="CHOOSE USERNAME" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="register-password" class="liquid-input" placeholder="CHOOSE PASSWORD" required>
+                </div>
+                <button type="submit" class="auth-btn submit-btn" style="width:100%;">
+                    <span>CREATE PROFILE</span>
+                </button>
+            </form>
+
             <div class="auth-footer">
-                GET-Standard 4-Sigma Compliance Secured
+                ISO 50001 & ISO 9001 Standard Telemetry | SSL Secured
             </div>
         </div>
     </div>
@@ -74,13 +99,13 @@
                     </div>
                     <div class="profile-main">
                         <h3 class="user-name">Guest Engineer</h3>
-                        <p class="user-rank" id="user-role">Cadet GET</p>
+                        <p class="user-rank" id="user-role">Junior Process Engineer</p>
                     </div>
                 </div>
                 
                 <div class="credit-wrap">
                     <div class="credit-info">
-                        <span class="credit-label">CHELL CREDITS</span>
+                        <span class="credit-label">SIMULATION CREDITS</span>
                         <span class="credit-count" id="chell-credits">5 / 5</span>
                     </div>
                     <div class="credit-bar">
@@ -89,7 +114,7 @@
                 </div>
                 
                 <button class="upgrade-btn" onclick="app.openUpgradeModal()">
-                    <i data-lucide="zap"></i> UNLOCK CHELL PRO
+                    <i data-lucide="award"></i> UPGRADE LICENSE
                 </button>
             </div>
 
@@ -104,22 +129,22 @@
             <div class="sidebar-divider"></div>
 
             <div class="sidebar-title">
-                <i data-lucide="blocks"></i>
-                <span>DIGITAL NEXUS</span>
+                <i data-lucide="bar-chart-3"></i>
+                <span>ANALYTICS & REPORTING</span>
             </div>
             <ul class="tool-nav">
                 <li class="tool-item" id="btn-portfolio">
                     <i data-lucide="user-circle"></i>
-                    <span>Portfolio Builder</span>
+                    <span>Performance Portfolio</span>
                     <span class="tool-badge">PRO</span>
                 </li>
                 <li class="tool-item" id="btn-cv-extractor">
                     <i data-lucide="file-search"></i>
-                    <span>CV Intelligence</span>
+                    <span>Resume Parser</span>
                 </li>
                 <li class="tool-item" id="btn-ppt-gen">
                     <i data-lucide="presentation"></i>
-                    <span>PPT Generator</span>
+                    <span>Export PPTX Report</span>
                 </li>
             </ul>
         </aside>
@@ -142,9 +167,12 @@
                         <span class="stat-value"><strong id="capital-display">$1,000.00</strong></span>
                     </div>
                 </div>
-                <div class="nav-actions">
+                <div class="nav-actions" style="display: flex; gap: 8px;">
                     <div class="reset-system-wrap" id="reset-btn" title="Emergency Reset">
                         <i data-lucide="refresh-ccw" class="reset-icon"></i>
+                    </div>
+                    <div class="reset-system-wrap" id="logout-btn" title="Sign Out">
+                        <i data-lucide="log-out" class="reset-icon"></i>
                     </div>
                 </div>
             </nav>
@@ -163,10 +191,10 @@
                 <div class="game-pane liquid-glass">
                     <div class="pane-header">
                         <div class="pane-header-content">
-                            <i data-lucide="gamepad-2" class="pane-header-icon"></i>
-                            <span class="pane-header-title">MOLECULAR FACTORY</span>
+                            <i data-lucide="atom" class="pane-header-icon"></i>
+                            <span class="pane-header-title">MOLECULAR DYNAMICS</span>
                         </div>
-                        <div class="stat-tag" id="game-tier-label">CADET SIMULATION</div>
+                        <div class="stat-tag" id="game-tier-label">LEVEL 1: ACADEMIC FOUNDATION</div>
                     </div>
                     <div class="game-container">
                         <canvas id="game-canvas" class="game-canvas"></canvas>
@@ -215,7 +243,7 @@
                         <i data-lucide="database" class="pane-header-icon"></i>
                         <span class="pane-header-title">ASSET REGISTRY</span>
                     </div>
-                    <div class="asset-registry-header">4-SIGMA VALIDATED</div>
+                    <div class="asset-registry-header">VALIDATED TELEMETRY</div>
                 </div>
                 <table class="asset-table">
                     <thead>

@@ -63,10 +63,10 @@ class NNManager:
         'Save on Interrupt upto 4-Sigma' - High reliability saving.
         We save with a timestamp and parity check to ensure 4-sigma level robustness.
         """
-        os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         temp_path = self.model_path + ".tmp"
         
         try:
+            os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
             # Atomic save: Write to temp, then rename
             state = {
                 'model_state_dict': self.model.state_dict(),

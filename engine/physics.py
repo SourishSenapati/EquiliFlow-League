@@ -33,10 +33,8 @@ def calculate_friction_factor(re_number: float, epsilon_d: float = 0.0) -> float
         return 64 / re_number if re_number > 0 else 0
     
     # Turbulent flow (Haaland equation)
+    epsilon_d = max(0.0, epsilon_d)
     term = (epsilon_d / 3.7)**1.11 + 6.9 / re_number
-    if term <= 0:
-        return 0.02
-    
     f_factor = (-1.8 * np.log10(term))**-2
     return f_factor
 

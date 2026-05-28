@@ -596,7 +596,7 @@ class EquiliFlowApp {
             chellCredits: 5,
             isPro: false,
              xp: 0,
-             role: 'Graduate Engineering Trainee',
+             role: 'Junior Process Engineer',
              physics: {
                  flow_rate: 0, temp_k: 0, conversion: 0, pressure_bar: 0, 
                  pump_power: 0, ai_loss: 0, entropy: 0, kinetic_e: 0
@@ -640,7 +640,16 @@ class EquiliFlowApp {
         this.reactor = new ReactorCanvas(document.getElementById('reactor-canvas'));
         this.molecules = new MolecularEngine(document.getElementById('game-canvas'));
 
-        // Auth
+        // Auth initialization
+        this.token = localStorage.getItem('equiliflow_token') || null;
+        const savedUser = localStorage.getItem('equiliflow_user');
+        if (this.token && savedUser) {
+            this.state.isAuthenticated = true;
+            this.state.user = JSON.parse(savedUser);
+        } else {
+            this.state.isAuthenticated = false;
+            this.state.user = null;
+        }
         this._checkAuth();
 
         // WebSocket
@@ -648,7 +657,6 @@ class EquiliFlowApp {
         this._wsLastSecond = Date.now();
         this._initWebSocket();
 
-         this._checkAuth();
         this._setupListeners();
         this._setupNexusHandlers();
         window.addEventListener('beforeunload', () => this._saveLocalState());
@@ -676,34 +684,132 @@ class EquiliFlowApp {
         }
     }
 
-    login(provider) {
-        // Industry Standard Simulation of Google/LinkedIn Auth
-        this.state.isAuthenticated = true; 
-        const mockName = provider === 'google' ? "Professional Engineer" : "Site Architect";
-        this.state.user = {
-            name: mockName, 
-            provider: provider,
-            avatar: mockName.split(' ').map(n=>n[0]).join('')
-        };
-        this.notify(`EquiliFlow Unified Auth: ${provider.toUpperCase()} Deployment Sequence Initialized`, 'success');
+    async _apiFetch(url, options = {}) {
+        options.headers = options.headers || {};
+        if (this.token) {
+            options.headers['X-User-Token'] = this.token;
+        }
+        return fetch(url, options);
+    }
+
+    switchAuthTab(tab) {
+        const formLogin = document.getElementById('form-login');
+        const formRegister = document.getElementById('form-register');
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
         
-        setTimeout(() => {
-            this._showApp();
-            this._saveLocalState();
-        }, 1200);
+        if (tab === 'login') {
+            formLogin.style.display = 'block';
+            formRegister.style.display = 'none';
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+        } else {
+            formLogin.style.display = 'none';
+            formRegister.style.display = 'block';
+            tabLogin.classList.remove('active');
+            tabRegister.classList.add('active');
+        }
+    }
+
+    async handleAuthSubmit(event, action) {
+        event.preventDefault();
+        
+        if (action === 'login') {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    this.token = data.token;
+                    this.state.isAuthenticated = true;
+                    this.state.user = {
+                        name: data.name,
+                        avatar: data.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+                    };
+                    
+                    localStorage.setItem('equiliflow_token', this.token);
+                    localStorage.setItem('equiliflow_user', JSON.stringify(this.state.user));
+                    this._saveLocalState();
+                    
+                    this.notify('Authentication Successful: Session Initialized', 'success');
+                    
+                    // Reset existing websocket if active
+                    if (this._ws) {
+                        this._ws.close();
+                    }
+                    
+                    this._showApp();
+                    this._initWebSocket();
+                } else {
+                    this.notify(data.message || 'Authentication Failed', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                this.notify('Server connection error', 'error');
+            }
+        } else if (action === 'register') {
+            const name = document.getElementById('register-name').value;
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            
+            try {
+                const response = await fetch('/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, username, password })
+                });
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    this.notify('Registration Successful. Please Login.', 'success');
+                    this.switchAuthTab('login');
+                    document.getElementById('login-username').value = username;
+                    document.getElementById('login-password').value = '';
+                } else {
+                    this.notify(data.message || 'Registration Failed', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                this.notify('Server connection error', 'error');
+            }
+        }
+    }
+
+    logout() {
+        this.token = null;
+        this.state.isAuthenticated = false;
+        this.state.user = null;
+        localStorage.removeItem('equiliflow_token');
+        localStorage.removeItem('equiliflow_user');
+        this._saveLocalState();
+        this.notify('Session Terminated', 'info');
+        
+        if (this._ws) {
+            this._ws.close();
+        }
+        
+        document.getElementById('auth-overlay').style.display = 'grid';
+        document.getElementById('main-app').style.display = 'none';
     }
 
     openUpgradeModal() {
-        this.openModal('CHELL PRO — PAYMENT GATEWAY', `
+        this.openModal('ENTERPRISE LICENSE UPGRADE', `
             <div class="payment-terminal liquid-glass">
                 <div class="terminal-header">
                     <i data-lucide="shield-check" class="terminal-icon"></i>
-                    <span>SECURE TRANSACTION — V1.0.4</span>
+                    <span>SECURE ENCRYPTED TRANSACTION</span>
                 </div>
                 <div class="terminal-display">
-                    <div class="terminal-row"><span>PRODUCT:</span> <span>CHELL PRO PASS</span></div>
-                    <div class="terminal-row"><span>PRICE:</span> <span>$29.99 / ANNUM</span></div>
-                    <div class="terminal-row"><span>LIMIT:</span> <span>UNLIMITED ASSETS</span></div>
+                    <div class="terminal-row"><span>PRODUCT:</span> <span>PROFESSIONAL LICENSE</span></div>
+                    <div class="terminal-row"><span>PRICE:</span> <span>$299.00 / YEAR</span></div>
+                    <div class="terminal-row"><span>LIMIT:</span> <span>UNLIMITED ASSET MODES</span></div>
                 </div>
                 <div class="terminal-input">
                     <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" class="liquid-input">
@@ -713,20 +819,30 @@ class EquiliFlowApp {
                     </div>
                 </div>
                 <button class="auth-btn" style="width:100%;" onclick="app.processPayment()">
-                    AUTHORIZE DEPLOYMENT
+                    ACTIVATE LICENSE
                 </button>
             </div>
         `);
         lucide.createIcons();
     }
 
-    processPayment() {
-        this.notify("Authorization Successful: CHELL PRO Assets Unlocked.", "success");
-        this.state.isPro = true;
-        this.state.chellCredits = "∞";
-        this.closeModal();
-        this._updateProfileUI();
-        this._saveLocalState();
+    async processPayment() {
+        try {
+            const res = await this._apiFetch('/api/v1/user/upgrade', { method: 'POST' });
+            const d = await res.json();
+            if (d.status === 'success') {
+                this.notify("Authorization Successful: Professional License Activated.", "success");
+                this.state.isPro = true;
+                this.state.chellCredits = "∞";
+                this.closeModal();
+                this._updateProfileUI();
+                this._saveLocalState();
+            } else {
+                this.notify("Authorization Failed.", "error");
+            }
+        } catch {
+            this.notify("Connection error during authorization.", "error");
+        }
     }
 
     _showApp() {
@@ -765,7 +881,8 @@ class EquiliFlowApp {
 
     _initWebSocket() {
         const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-        const url = `${proto}://${location.host}/ws/reactor`;
+        const tokenParam = this.token ? `?token=${encodeURIComponent(this.token)}` : '';
+        const url = `${proto}://${location.host}/ws/reactor${tokenParam}`;
         try {
             this._ws = new WebSocket(url);
             this._ws.onopen    = () => this._onWsOpen();
@@ -779,7 +896,7 @@ class EquiliFlowApp {
 
     _onWsOpen() {
         this._setOnline(true);
-        this.notify('WebSocket stream established — 2 Hz real-time physics', 'success');
+        this.notify('Telemetry Stream Established: 2 Hz real-time physics active', 'success');
         clearInterval(this._httpPollTimer);
     }
 
@@ -812,7 +929,7 @@ class EquiliFlowApp {
 
     async _httpPoll() {
         try {
-            const res = await fetch('/api/v1/status');
+            const res = await this._apiFetch('/api/v1/status');
             if (res.ok) {
                 const data = await res.json();
                 this._applyPhysics({ ...data, ...(data.ai_status || {}) });
@@ -832,11 +949,36 @@ class EquiliFlowApp {
         Object.assign(this.state.physics, data);
         if (data.capital !== undefined) this.state.capital = data.capital;
         if (data.year    !== undefined) this.state.year    = data.year;
+        if (data.assets  !== undefined) {
+            this.state.assets = data.assets;
+            this._renderAssets();
+        }
 
         this._updateHeader();
         this._updateStatusChips(data);
         this.reactor.setPhysics(data);
         this._renderTelemetry();
+
+        // Sync control slider UI (only when user isn't dragging)
+        if (data.physics) {
+            const sliderFlow = document.getElementById('slider-flow');
+            const sliderTemp = document.getElementById('slider-temp');
+            const valFlow = document.getElementById('ctrl-flow-val');
+            const valTemp = document.getElementById('ctrl-temp-val');
+            
+            if (sliderFlow && document.activeElement !== sliderFlow && data.physics.flow_rate !== undefined) {
+                sliderFlow.value = data.physics.flow_rate;
+            }
+            if (sliderTemp && document.activeElement !== sliderTemp && data.physics.temp_k !== undefined) {
+                sliderTemp.value = data.physics.temp_k;
+            }
+            if (valFlow && data.physics.flow_rate !== undefined) {
+                valFlow.textContent = data.physics.flow_rate.toFixed(1);
+            }
+            if (valTemp && data.physics.temp_k !== undefined) {
+                valTemp.textContent = data.physics.temp_k.toFixed(0);
+            }
+        }
     }
 
     _updateStatusChips(d) {
@@ -880,7 +1022,7 @@ class EquiliFlowApp {
     async _initCurriculum() {
         try {
             // Initial Data Fetch
-            const dbRes = await fetch('/api/v1/db/state');
+            const dbRes = await this._apiFetch('/api/v1/db/state');
             const dbData = await dbRes.json();
             
             // Sync with persistent backend
@@ -942,7 +1084,7 @@ class EquiliFlowApp {
 
         // Update Game Tier Graphics
         this.molecules.tier = this.state.currentTierIdx;
-        const tierNames = ["CADET SIMULATION", "SYSTEMS OPERATOR", "PROCESS SENIOR", "PRINCIPAL DIGITAL TWIN"];
+        const tierNames = ["LEVEL 1: ACADEMIC FOUNDATION", "LEVEL 2: HYDRODYNAMICS", "LEVEL 3: REACTOR KINETICS", "LEVEL 4: PROCESS TWIN"];
         if (this.el.gameTierLabel) this.el.gameTierLabel.textContent = tierNames[this.state.currentTierIdx];
 
         panel.innerHTML = `
@@ -967,6 +1109,27 @@ class EquiliFlowApp {
                 `).join('')}
             </div>
 
+            <!-- PROCESS CONTROL PANEL -->
+            <div class="control-box-card" style="margin-top: 16px; padding: 14px; border-radius: 8px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.15);">
+                <div class="ctrl-header" style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; color:var(--accent); margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="sliders-horizontal" style="width:12px; height:12px;"></i> PROCESS SETPOINTS
+                </div>
+                <div class="control-group" style="margin-bottom: 10px;">
+                    <label style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-sec); margin-bottom:4px; font-weight:600;">
+                        <span>Feed Flow Rate (Q):</span>
+                        <span><strong id="ctrl-flow-val" style="color:var(--accent); font-family:'JetBrains Mono';">${this.state.physics.flow_rate ? this.state.physics.flow_rate.toFixed(1) : '10.0'}</strong> m³/h</span>
+                    </label>
+                    <input type="range" id="slider-flow" min="1" max="25" step="0.5" value="${this.state.physics.flow_rate || 10}" style="width:100%; accent-color:var(--accent); height: 4px; border-radius: 2px;" oninput="app.updateControlParam('flow_rate', this.value)">
+                </div>
+                <div class="control-group">
+                    <label style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-sec); margin-bottom:4px; font-weight:600;">
+                        <span>Reactor Temperature (T):</span>
+                        <span><strong id="ctrl-temp-val" style="color:var(--warning); font-family:'JetBrains Mono';">${this.state.physics.temp_k ? this.state.physics.temp_k.toFixed(0) : '350'}</strong> K</span>
+                    </label>
+                    <input type="range" id="slider-temp" min="280" max="480" step="1" value="${this.state.physics.temp_k || 350}" style="width:100%; accent-color:var(--warning); height: 4px; border-radius: 2px;" oninput="app.updateControlParam('temp_k', this.value)">
+                </div>
+            </div>
+
             <div class="nav-controls">
                 <button class="nav-pill secondary" onclick="app.prevMission()" ${this.state.currentTierIdx === 0 ? 'disabled' : ''}>
                     <i data-lucide="chevron-left"></i> Previous Tier
@@ -979,13 +1142,36 @@ class EquiliFlowApp {
         lucide.createIcons();
     }
 
+    async updateControlParam(param, value) {
+        // Update local state immediately for visual response
+        this.state.physics[param] = parseFloat(value);
+        if (param === 'flow_rate') {
+            const valFlow = document.getElementById('ctrl-flow-val');
+            if (valFlow) valFlow.textContent = parseFloat(value).toFixed(1);
+        } else if (param === 'temp_k') {
+            const valTemp = document.getElementById('ctrl-temp-val');
+            if (valTemp) valTemp.textContent = parseFloat(value).toFixed(0);
+        }
+        
+        // Push control setpoints to the backend simulation
+        try {
+            await this._apiFetch('/api/v1/simulation/control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [param]: parseFloat(value) })
+            });
+        } catch (e) {
+            console.error("Control parameter push failed", e);
+        }
+    }
+
     _updateRoleProgression() {
         const tier = this.state.currentTierIdx;
         
-        if (tier === 0) this.state.role = "Academic Explorer";
-        else if (tier === 1) this.state.role = "Systems Operator";
-        else if (tier === 2) this.state.role = "Process Senior";
-        else if (tier === 3) this.state.role = "Principal GET";
+        if (tier === 0) this.state.role = "Junior Process Engineer";
+        else if (tier === 1) this.state.role = "Operations Specialist";
+        else if (tier === 2) this.state.role = "Senior Process Engineer";
+        else if (tier === 3) this.state.role = "Principal Site Engineer";
 
         if (this.el.userRole) this.el.userRole.textContent = this.state.role;
         this._updateProfileUI();
@@ -1001,7 +1187,7 @@ class EquiliFlowApp {
         if (this.state.xp >= this.state.xpTarget) {
             this.state.xp = 0;
             this.state.xpTarget = Math.floor(this.state.xpTarget * 1.5); // 50% resistance increase
-            this.notify(`Career Milestone: XP Capacity Expanded to ${this.state.xpTarget}`, 'warning');
+            this.notify(`Career Milestone: Experience Cap Expanded to ${this.state.xpTarget}`, 'warning');
         }
 
         if (this.state.currentTierIdx < tierCount - 1) {
@@ -1009,13 +1195,13 @@ class EquiliFlowApp {
         } else if (this.state.currentDomainIdx < domCount - 1) {
             this.state.currentDomainIdx++;
             this.state.currentTierIdx = 0;
-            this.notify(`Domain Mastery: ${this.state.curriculum.domains[this.state.currentDomainIdx].title}`, 'success');
+            this.notify(`Domain Level Completed: ${this.state.curriculum.domains[this.state.currentDomainIdx].title}`, 'success');
         } else {
-            this.notify('Total Mastery: Site Operations Lead Status', 'success');
+            this.notify('Certification Completed: Principal Site Engineer Status', 'success');
         }
 
         try {
-            await fetch(`/api/v1/simulation/checkpoint?mission_id=${this.state.activeModule.id}`, { method: 'POST' });
+            await this._apiFetch(`/api/v1/simulation/checkpoint?mission_id=${this.state.activeModule.id}`, { method: 'POST' });
         } catch(e) {}
 
         await this._loadActiveModule();
@@ -1110,20 +1296,20 @@ class EquiliFlowApp {
 
     async upgradeAsset(id) {
         try {
-            const res = await fetch(`/api/v1/upgrade/start?component_id=${id}`, { method: 'POST' });
+            const res = await this._apiFetch(`/api/v1/upgrade/start?component_id=${id}`, { method: 'POST' });
             const d = await res.json();
-            this.notify(d.message || 'Upgrade initiated', 'success');
-        } catch { this.notify('Upgrade failed', 'error'); }
+            this.notify(d.message || 'Process upgrade initiated', 'success');
+        } catch { this.notify('Process upgrade failed', 'error'); }
     }
 
     async repairAsset(id) {
         try {
-            const res = await fetch(`/api/v1/maintenance/repair?component_id=${id}`, { method: 'POST' });
+            const res = await this._apiFetch(`/api/v1/maintenance/repair?component_id=${id}`, { method: 'POST' });
             const d = await res.json();
-            this.notify(d.message || 'Repaired', 'success');
+            this.notify(d.message || 'Asset restored to nominal condition', 'success');
             if (this.state.assets[id]) this.state.assets[id].durability = 100;
             this._renderAssets();
-        } catch { this.notify('Repair failed', 'error'); }
+        } catch { this.notify('Maintenance operation failed', 'error'); }
     }
 
     /* -----------------  TELEMETRY PANEL  --------------- */
@@ -1141,28 +1327,32 @@ class EquiliFlowApp {
         if (this.el.resetBtn) {
             this.el.resetBtn.onclick = async () => {
                 if (!confirm('Reset full simulation state?')) return;
-                await fetch('/api/v1/simulation/reset', { method: 'POST' });
-                this.notify('System re-initialized', 'success');
+                await this._apiFetch('/api/v1/simulation/reset', { method: 'POST' });
+                this.notify('System configuration reset to default', 'success');
                 if (this._ws) { this._ws.close(); }
                 this._initWebSocket();
             };
         }
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.onclick = () => this.logout();
+        }
         if (this.el.examineBtn) {
-            this.el.examineBtn.onclick = () => this.notify('Insight submitted for evaluation.', 'success');
+            this.el.examineBtn.onclick = () => this.notify('Analytical report submitted for review.', 'success');
         }
 
         // Game Controls
         document.getElementById('spawn-mol').onclick = () => {
             for(let i=0; i<5; i++) this.molecules.spawn();
-            this.notify('Charged molecules injected', 'info');
+            this.notify('Molecular dynamic particles injected', 'info');
         };
         document.getElementById('heat-box').onclick = () => {
             this.molecules.heat();
-            this.notify('Thermal energy increased', 'warning');
+            this.notify('Thermal heat flux increased', 'warning');
         };
         document.getElementById('cool-box').onclick = () => {
             this.molecules.cool();
-            this.notify('Cryogenic stabilization active', 'success');
+            this.notify('Cooling water loop active', 'success');
         };
     }
 
@@ -1183,27 +1373,27 @@ class EquiliFlowApp {
     _consumeChellCredit() {
         if (this.state.isPro) return true;
         if (this.state.chellCredits <= 0) {
-            this.openModal('CHELL PRO — Limit Reached', `
+            this.openModal('PROFESSIONAL LICENSE REQUIRED', `
                 <div style="text-align:center;">
                     <div style="width:60px; height:60px; background:var(--grad-all); border-radius:15px; margin:0 auto 24px; display:grid; place-items:center;">
-                        <i data-lucide="zap" style="color:#000; width:30px; height:30px;"></i>
+                        <i data-lucide="award" style="color:#000; width:30px; height:30px;"></i>
                     </div>
-                    <h3 style="color:white; margin-bottom:12px;">Go CHELL PRO for Unlimited Analysis</h3>
-                    <p style="color:var(--text-sec); margin-bottom:24px;">You've used all 5 free analysis credits. Upgrade to CHELL PRO to unlock industrial-grade tools for GETs and Site Leads.</p>
+                    <h3 style="color:white; margin-bottom:12px;">Upgrade to Professional License</h3>
+                    <p style="color:var(--text-sec); margin-bottom:24px;">You have used all 5 free simulation credits. Please upgrade your license to unlock unlimited process analysis and exporting capabilities.</p>
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
                         <div class="theory-item" style="background:rgba(255,255,255,0.05); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
-                            <div style="font-size:24px; font-weight:800; color:white;">$0.00</div>
-                            <div style="font-size:10px; color:var(--text-ter);">Current Free Plan</div>
+                            <div style="font-size:24px; font-weight:800; color:white;">Free</div>
+                            <div style="font-size:10px; color:var(--text-ter);">Evaluation Plan</div>
                         </div>
                         <div class="theory-item" style="background:rgba(139,92,246,0.1); padding:16px; border-radius:12px; border:1px solid var(--accent);">
-                            <div style="font-size:24px; font-weight:800; color:var(--accent);">$19/mo</div>
-                            <div style="font-size:10px; color:var(--text-ter);">Annual Billing</div>
+                            <div style="font-size:24px; font-weight:800; color:var(--accent);">$299/yr</div>
+                            <div style="font-size:10px; color:var(--text-ter);">Professional License</div>
                         </div>
                     </div>
                     <button class="nav-pill" style="width:100%; height:48px; margin-top:20px; font-weight:800; background:var(--grad-all); color:#000; border:none;" onclick="app.upgradeToPro()">
                         Upgrade Now
                     </button>
-                    <p style="font-size:10px; color:var(--text-ter); margin-top:16px;">Secure payment via Stripe & Ethereum.</p>
+                    <p style="font-size:10px; color:var(--text-ter); margin-top:16px;">Secure payment checkout powered by Stripe.</p>
                 </div>
             `);
             lucide.createIcons();
@@ -1214,18 +1404,29 @@ class EquiliFlowApp {
         return true;
     }
 
-    upgradeToPro() {
-        this.state.isPro = true;
-        this.state.chellCredits = '∞';
-        this._updateProfileUI();
-        this.notify('CHELL PRO Activated', 'success');
-        this.closeModal();
+    async upgradeToPro() {
+        try {
+            const res = await this._apiFetch('/api/v1/user/upgrade', { method: 'POST' });
+            const d = await res.json();
+            if (d.status === 'success') {
+                this.state.isPro = true;
+                this.state.chellCredits = '∞';
+                this._updateProfileUI();
+                this.notify('Professional License Activated', 'success');
+                this.closeModal();
+                this._saveLocalState();
+            } else {
+                this.notify('License upgrade failed', 'error');
+            }
+        } catch {
+            this.notify('Connection error during upgrade', 'error');
+        }
     }
 
     _generatePortfolio() {
         if (!this._consumeChellCredit()) return;
         this.notify('Generating Verified Achievement Portfolio...', 'info');
-        this.openModal('Portfolio Builder — Tier 1 Access', `
+        this.openModal('Performance Portfolio — Level 1 Access', `
             <div class="portfolio-preview">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
                     <div>
@@ -1250,7 +1451,7 @@ class EquiliFlowApp {
                 <div style="margin-top:20px; font-size:12px; color:var(--text-sec);">
                     <p>Verified achievements in mass & energy balance via industrial digital twin simulation.</p>
                 </div>
-                <button class="liquid-btn" style="width:100%; margin-top:20px;" onclick="app.notify('Certificate export locked for Year 1 students','warning')">
+                <button class="liquid-btn" style="width:100%; margin-top:20px;" onclick="app.notify('Report export locked for Year 1 engineers','warning')">
                     <i data-lucide="download"></i> Download Official PDF
                 </button>
             </div>
@@ -1265,15 +1466,15 @@ class EquiliFlowApp {
         input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                this.openModal('CV Intelligence — AI Extraction', `
+                this.openModal('Resume Parsing System', `
                     <div style="text-align:center; padding:20px;">
-                        <i data-lucide="cpu" style="width:48px; height:48px; color:var(--accent); margin-bottom:16px;"></i>
+                        <i data-lucide="file-text" style="width:48px; height:48px; color:var(--accent); margin-bottom:16px;"></i>
                         <p style="color:var(--text-sec);">Analyzing <strong>${file.name}</strong>...</p>
                         <div style="height:4px; background:rgba(255,255,255,0.1); border-radius:10px; margin:20px 0; overflow:hidden;">
                             <div id="cv-progress" style="height:100%; width:0; background:var(--accent); transition:1.5s;"></div>
                         </div>
                         <div id="cv-results" style="opacity:0; transition:0.5s;">
-                            <h4 style="color:white; margin-bottom:12px;">Extraction Complete</h4>
+                            <h4 style="color:white; margin-bottom:12px;">Analysis Complete</h4>
                             <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
                                 <span class="indicator-chip" style="background:rgba(6,182,212,0.1); color:var(--grad-cyan);">Heat Transfer</span>
                                 <span class="indicator-chip" style="background:rgba(6,182,212,0.1); color:var(--grad-cyan);">Python (FastAPI)</span>
@@ -1292,8 +1493,8 @@ class EquiliFlowApp {
 
     _generatePpt() {
         if (!this._consumeChellCredit()) return;
-        this.notify('Exporting Live Data to Presentation...', 'info');
-        const data = `EquiliFlow League - Industrial Report\nTime: ${new Date().toLocaleString()}\nCapital: $${this.state.capital}\nEfficiency: ${this.state.physics.conversion * 100}%\nConversion: 0.98`;
+        this.notify('Exporting Telemetry Data to Process Report...', 'info');
+        const data = `EquiliFlow League - Process Report\nTime: ${new Date().toLocaleString()}\nCapital: $${this.state.capital}\nEfficiency: ${this.state.physics.conversion * 100}%\nConversion: 0.98`;
         const blob = new Blob([data], { type: 'text/plain' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

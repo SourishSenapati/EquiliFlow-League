@@ -8,7 +8,7 @@ class GameEconomy:
     
     def __init__(self, data_path="data/save_state.json"):
         self.data_path = data_path
-        self.capital = 5000.0  # (Tokens)
+        self.capital = 154200.0  # (Tokens)
         self.premium_tokens = 0
         self.total_revenue = 0.0
         self.upgrades: Dict[str, Any] = {}
