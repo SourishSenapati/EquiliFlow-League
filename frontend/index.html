@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>EquiliFlow League | Chemical Engineering Digital Twin</title>
-    <meta name="description" content="The premium chemical engineering digital twin platform. 4-year industrial simulation with GPU-accelerated AI.">
+    <meta name="description" content="Industrial chemical engineering simulation platform. 4-year curriculum with real-time reactor physics, process control, and digital twin telemetry.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,16 +15,18 @@
 
     <!-- AUTH OVERLAY -->
     <div id="auth-overlay" class="auth-overlay">
-        <div class="auth-card liquid-glass">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+                    <rect x="1" y="1" width="36" height="36" rx="8" stroke="#00c4cc" stroke-width="1.5"/>
+                    <path d="M10 19 L19 10 L28 19 L19 28 Z" fill="#00c4cc" opacity="0.25"/>
+                    <path d="M14 19 L19 14 L24 19 L19 24 Z" fill="#00c4cc" opacity="0.7"/>
+                    <circle cx="19" cy="19" r="2" fill="#00c4cc"/>
+                </svg>
+            </div>
             <div class="auth-header">
-                <div class="auth-logo">
-                    <svg width="40" height="40" viewBox="0 0 30 30" fill="none">
-                        <circle cx="15" cy="15" r="14" stroke="#a78bfa" stroke-width="2"/>
-                        <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="#a78bfa" opacity="0.6"/>
-                    </svg>
-                </div>
-                <h1>EquiliFlow League</h1>
-                <p>Industrial Simulation & Process Optimization Platform</p>
+                <h1>EquiliFlow <span>League</span></h1>
+                <p>Process Engineering Simulation Platform</p>
             </div>
             
             <div class="auth-tabs">
@@ -35,58 +37,55 @@
             <!-- Login Form -->
             <form id="form-login" class="auth-form" onsubmit="app.handleAuthSubmit(event, 'login')">
                 <div class="form-group">
-                    <input type="text" id="login-username" class="liquid-input" placeholder="USERNAME" value="admin" required>
+                    <input type="text" id="login-username" class="liquid-input" placeholder="Username" value="admin" autocomplete="username" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="login-password" class="liquid-input" placeholder="PASSWORD" value="admin" required>
+                    <input type="password" id="login-password" class="liquid-input" placeholder="Password" value="admin" autocomplete="current-password" required>
                 </div>
                 <button type="submit" class="auth-btn submit-btn" style="width:100%;">
-                    <span>INITIALIZE OPERATION</span>
+                    <span>INITIALIZE SESSION</span>
                 </button>
             </form>
 
             <!-- Register Form -->
             <form id="form-register" class="auth-form" style="display:none;" onsubmit="app.handleAuthSubmit(event, 'register')">
                 <div class="form-group">
-                    <input type="text" id="register-name" class="liquid-input" placeholder="FULL NAME" required>
+                    <input type="text" id="register-name" class="liquid-input" placeholder="Full Name" autocomplete="name" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="register-username" class="liquid-input" placeholder="CHOOSE USERNAME" required>
+                    <input type="text" id="register-username" class="liquid-input" placeholder="Choose Username" autocomplete="username" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="register-password" class="liquid-input" placeholder="CHOOSE PASSWORD" required>
+                    <input type="password" id="register-password" class="liquid-input" placeholder="Choose Password" autocomplete="new-password" required>
                 </div>
                 <button type="submit" class="auth-btn submit-btn" style="width:100%;">
-                    <span>CREATE PROFILE</span>
+                    <span>CREATE ACCOUNT</span>
                 </button>
             </form>
 
             <div class="auth-footer">
-                ISO 50001 & ISO 9001 Standard Telemetry | SSL Secured
+                ISO 50001 &amp; ISO 9001 | TLS Secured
             </div>
         </div>
     </div>
 
-    <!-- Animated Background Canvas -->
-    <div class="bg-canvas" aria-hidden="true">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
-    </div>
+    <!-- Background -->
+    <div class="bg-canvas" aria-hidden="true"></div>
 
     <div class="app-container" id="main-app" style="display:none;">
         
         <!-- SIDEBAR -->
-        <aside class="sidebar liquid-glass">
+        <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="nav-logo">
-                    <div class="logo-mark">
-                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none">
-                            <circle cx="15" cy="15" r="14" stroke="#a78bfa" stroke-width="1.5"/>
-                            <path d="M8 15 L15 8 L22 15 L15 22 Z" fill="#a78bfa" opacity="0.9"/>
-                        </svg>
-                    </div>
+                <svg width="22" height="22" viewBox="0 0 38 38" fill="none" style="flex-shrink:0;">
+                    <rect x="1" y="1" width="36" height="36" rx="8" stroke="#00c4cc" stroke-width="1.5"/>
+                    <path d="M10 19 L19 10 L28 19 L19 28 Z" fill="#00c4cc" opacity="0.2"/>
+                    <path d="M14 19 L19 14 L24 19 L19 24 Z" fill="#00c4cc" opacity="0.65"/>
+                    <circle cx="19" cy="19" r="2" fill="#00c4cc"/>
+                </svg>
+                <div>
+                    <div class="nav-logo-text">EquiliFlow</div>
+                    <div class="nav-logo-sub">Eng. Sim Platform</div>
                 </div>
             </div>
 
@@ -105,11 +104,11 @@
                 
                 <div class="credit-wrap">
                     <div class="credit-info">
-                        <span class="credit-label">SIMULATION CREDITS</span>
+                        <span>SIM CREDITS</span>
                         <span class="credit-count" id="chell-credits">5 / 5</span>
                     </div>
                     <div class="credit-bar">
-                        <div class="credit-fill" id="chell-fill" style="width: 100%"></div>
+                        <div class="credit-fill" id="chell-fill" style="width:100%"></div>
                     </div>
                 </div>
                 
@@ -130,7 +129,7 @@
 
             <div class="sidebar-title">
                 <i data-lucide="bar-chart-3"></i>
-                <span>ANALYTICS & REPORTING</span>
+                <span>ANALYTICS</span>
             </div>
             <ul class="tool-nav">
                 <li class="tool-item" id="btn-portfolio">
@@ -144,7 +143,7 @@
                 </li>
                 <li class="tool-item" id="btn-ppt-gen">
                     <i data-lucide="presentation"></i>
-                    <span>Export PPTX Report</span>
+                    <span>Export Report</span>
                 </li>
             </ul>
         </aside>
@@ -167,8 +166,8 @@
                         <span class="stat-value"><strong id="capital-display">$1,000.00</strong></span>
                     </div>
                 </div>
-                <div class="nav-actions" style="display: flex; gap: 8px;">
-                    <div class="reset-system-wrap" id="reset-btn" title="Emergency Reset">
+                <div class="nav-actions">
+                    <div class="reset-system-wrap" id="reset-btn" title="Reset Simulation">
                         <i data-lucide="refresh-ccw" class="reset-icon"></i>
                     </div>
                     <div class="reset-system-wrap" id="logout-btn" title="Sign Out">
@@ -200,19 +199,19 @@
                         <canvas id="game-canvas" class="game-canvas"></canvas>
                         <div class="game-overlay">
                             <div class="game-controls">
-                                <button class="game-btn" id="spawn-mol">
+                                <button class="game-btn" id="spawn-mol" title="Inject Particles">
                                     <i data-lucide="plus"></i>
                                 </button>
-                                <button class="game-btn" id="heat-box">
+                                <button class="game-btn" id="heat-box" title="Increase Temperature">
                                     <i data-lucide="flame"></i>
                                 </button>
-                                <button class="game-btn" id="cool-box">
+                                <button class="game-btn" id="cool-box" title="Decrease Temperature">
                                     <i data-lucide="snowflake"></i>
                                 </button>
                             </div>
                             <div class="physics-readout">
-                                <div>Kinetic Energy: <span id="kin-e">0.00</span> J</div>
-                                <div>Net Entropy: <span id="entropy-val">0.00</span> J/K</div>
+                                <div>KE: <span id="kin-e">0.00</span> J</div>
+                                <div>S: <span id="entropy-val">0.00</span> J/K</div>
                             </div>
                         </div>
                     </div>
@@ -245,22 +244,24 @@
                     </div>
                     <div class="asset-registry-header">VALIDATED TELEMETRY</div>
                 </div>
-                <table class="asset-table">
-                    <thead>
-                        <tr>
-                            <th>Asset ID</th>
-                            <th>Type</th>
-                            <th>Tier</th>
-                            <th>Durability</th>
-                            <th>Efficiency</th>
-                            <th>Maintenance</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="asset-table-body">
-                        <!-- Injected by JS -->
-                    </tbody>
-                </table>
+                <div class="asset-table-wrap">
+                    <table class="asset-table">
+                        <thead>
+                            <tr>
+                                <th>Asset ID</th>
+                                <th>Type</th>
+                                <th>Tier</th>
+                                <th>Durability</th>
+                                <th>Efficiency</th>
+                                <th>Maintenance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="asset-table-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </main>

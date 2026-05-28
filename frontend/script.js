@@ -50,10 +50,10 @@ class MolecularEngine {
 
     _getTierColor() {
         const colors = [
-            ['#8b5cf6', '#06b6d4'], // Cadet: Purple/Cyan
-            ['#10b981', '#3b82f6'], // Operator: Green/Blue
-            ['#f59e0b', '#ef4444'], // Senior: Amber/Red
-            ['#ffffff', '#8b5cf6']  // Principal: White/Neon
+            ['#00c4cc', '#00c07a'], // L1: Cyan/Green
+            ['#00c07a', '#4a9eff'], // L2: Green/Blue
+            ['#e89b1a', '#e8384a'], // L3: Amber/Red
+            ['#f0f0f0', '#7c5cfc']  // L4: White/Purple
         ];
         const pair = colors[this.tier] || colors[0];
         return Math.random() > 0.5 ? pair[0] : pair[1];
@@ -365,8 +365,8 @@ class ReactorCanvas {
             // Circle pump
             const r = 22;
             const grd = ctx.createRadialGradient(0, 0, 2, 0, 0, r);
-            grd.addColorStop(0, 'rgba(56,189,248,0.5)');
-            grd.addColorStop(1, 'rgba(56,189,248,0.05)');
+            grd.addColorStop(0, 'rgba(0,196,204,0.5)');
+            grd.addColorStop(1, 'rgba(0,196,204,0.05)');
             ctx.beginPath();
             ctx.arc(0, 0, r, 0, Math.PI * 2);
             ctx.fillStyle = grd;
@@ -847,33 +847,38 @@ class EquiliFlowApp {
 
     _showApp() {
         document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('main-app').style.display = 'flex';
+        const mainApp = document.getElementById('main-app');
+        mainApp.style.display = 'flex';
+        // On mobile, allow scrolling
+        if (window.innerWidth <= 900) {
+            mainApp.style.flexDirection = 'column';
+            mainApp.style.height = 'auto';
+            mainApp.style.minHeight = '100dvh';
+        }
         this._updateProfileUI();
         this._initCurriculum();
     }
 
     _updateProfileUI() {
-        if (this.el.userName && this.state.user) this.el.userName.textContent = this.state.user.name;
-        if (this.el.userInitials && this.state.user) this.el.userInitials.textContent = this.state.user.avatar;
+        if (this.el.userName && this.state.user) {
+            this.el.userName.textContent = this.state.user.name;
+        }
+        if (this.el.userInitials && this.state.user) {
+            this.el.userInitials.textContent = this.state.user.avatar || 'EF';
+        }
         
         if (this.el.chellCredits) {
             const count = this.state.chellCredits === '∞' ? '∞' : this.state.chellCredits;
             this.el.chellCredits.textContent = `${count} / 5`;
         }
         if (this.el.chellFill) {
-            const w = this.state.chellCredits === '∞' ? 100 : (this.state.chellCredits / 5) * 100;
-            this.el.chellFill.style.width = `${w}%`;
+            const w = this.state.chellCredits === '∞' ? 100 : (Number(this.state.chellCredits) / 5) * 100;
+            this.el.chellFill.style.width = `${Math.max(0, w)}%`;
         }
         if (this.el.proBadge) {
-            if (this.state.isPro) {
-                this.el.proBadge.textContent = 'PRO';
-                this.el.proBadge.classList.add('pro');
-            } else {
-                this.el.proBadge.textContent = 'FREE';
-                this.el.proBadge.classList.remove('pro');
-            }
+            this.el.proBadge.style.display = this.state.isPro ? 'block' : 'none';
         }
-        if (this.el.userRole) this.el.userRole.textContent = this.state.role;
+        if (this.el.userRole) this.el.userRole.textContent = this.state.role || 'Junior Process Engineer';
         if (this.el.yearDisplay) this.el.yearDisplay.textContent = Math.floor(this.state.xp / 1000) + 1;
     }
 
